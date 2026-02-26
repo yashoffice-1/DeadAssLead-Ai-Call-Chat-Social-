@@ -5,8 +5,8 @@ import Link from "next/link"
 
 export function HeroSection() {
   return (
-    <section className="flex flex-col items-center justify-center px-6 pt-32 pb-24 text-center">
-      <div className="mb-4 inline-flex items-center rounded-full border border-border px-4 py-1.5 text-sm text-muted-foreground">
+    <section className="flex flex-col items-center px-6 py-24 text-center md:py-32" suppressHydrationWarning>
+      <div className="mb-4 inline-flex items-center rounded-full border border-border px-4 py-1.5 text-sm text-muted-foreground" suppressHydrationWarning>
         <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-500" />
         Now deploying private AI instances
       </div>
@@ -18,7 +18,7 @@ export function HeroSection() {
         all your DMs and calls are 100% secure. One platform, total control.
       </p>
       <Link
-        href="/dashboard"
+        href="/signup"
         className="mt-10 inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 text-base font-medium text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
       >
         Make a Great Start

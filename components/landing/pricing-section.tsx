@@ -1,4 +1,5 @@
 import { Check } from "lucide-react"
+import Link from "next/link"
 
 const plans = [
   {
@@ -50,9 +51,9 @@ const plans = [
 
 export function PricingSection() {
   return (
-    <section className="px-6 py-24">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-4 text-center text-sm font-medium uppercase tracking-widest text-muted-foreground">
+    <section className="px-6 py-24" suppressHydrationWarning>
+      <div className="mx-auto max-w-5xl" suppressHydrationWarning>
+        <div className="mb-4 text-center text-sm font-medium uppercase tracking-widest text-muted-foreground" suppressHydrationWarning>
           Pricing
         </div>
         <h2 className="mb-4 text-center text-3xl font-bold tracking-tight text-foreground md:text-4xl">
@@ -67,11 +68,10 @@ export function PricingSection() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex flex-col rounded-xl border p-8 transition-shadow ${
-                plan.highlighted
-                  ? "border-foreground shadow-lg"
-                  : "border-border"
-              }`}
+              className={`relative flex flex-col rounded-xl border p-8 transition-shadow ${plan.highlighted
+                ? "border-foreground shadow-lg"
+                : "border-border"
+                }`}
             >
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-foreground px-3 py-1 text-xs font-medium text-background">
@@ -98,15 +98,15 @@ export function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <button
-                className={`w-full rounded-lg py-3 text-sm font-medium transition-all active:scale-[0.98] ${
-                  plan.highlighted
-                    ? "bg-foreground text-background hover:opacity-90"
-                    : "border border-border bg-background text-foreground hover:bg-secondary"
-                }`}
+              <Link
+                href="/signup"
+                className={`block w-full rounded-lg py-3 text-center text-sm font-medium transition-all active:scale-[0.98] ${plan.highlighted
+                  ? "bg-foreground text-background hover:opacity-90"
+                  : "border border-border bg-background text-foreground hover:bg-secondary"
+                  }`}
               >
                 {plan.cta}
-              </button>
+              </Link>
             </div>
           ))}
         </div>

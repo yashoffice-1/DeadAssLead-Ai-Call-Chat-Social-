@@ -63,9 +63,9 @@ function PlivoIcon() {
 
 export function ConnectionHub() {
   return (
-    <section className="px-6 py-24">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground">
+    <section className="px-6 py-24" suppressHydrationWarning>
+      <div className="mx-auto max-w-5xl" suppressHydrationWarning>
+        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground" suppressHydrationWarning>
           Connection Hub
         </div>
         <h2 className="mb-12 text-3xl font-bold tracking-tight text-foreground md:text-4xl">

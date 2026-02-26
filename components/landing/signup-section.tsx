@@ -21,8 +21,8 @@ export function SignupSection() {
 
   if (submitted) {
     return (
-      <section id="signup" className="px-6 py-24">
-        <div className="mx-auto max-w-3xl">
+      <section id="signup" className="px-6 py-24" suppressHydrationWarning>
+        <div className="mx-auto max-w-3xl" suppressHydrationWarning>
           <div className="rounded-xl border border-border bg-background p-8">
             <div className="mb-6 flex items-center gap-2 border-b border-border pb-4">
               <div className="h-3 w-3 rounded-full bg-emerald-500" />
@@ -47,9 +47,9 @@ export function SignupSection() {
   }
 
   return (
-    <section id="signup" className="px-6 py-24">
-      <div className="mx-auto max-w-3xl text-center">
-        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground">
+    <section id="signup" className="px-6 py-24" suppressHydrationWarning>
+      <div className="mx-auto max-w-3xl text-center" suppressHydrationWarning>
+        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground" suppressHydrationWarning>
           Get Started
         </div>
         <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">

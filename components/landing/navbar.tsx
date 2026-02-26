@@ -14,8 +14,8 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <header className="fixed top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md" suppressHydrationWarning>
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4" suppressHydrationWarning>
         <a href="#" className="text-lg font-bold tracking-tight text-foreground">
           DeadAssLead
         </a>
@@ -32,7 +32,13 @@ export function Navbar() {
             </a>
           ))}
           <Link
-            href="/dashboard"
+            href="/login"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/signup"
             className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-all hover:opacity-90"
           >
             Get Started
@@ -64,9 +70,17 @@ export function Navbar() {
               </a>
             ))}
             <Link
-              href="/dashboard"
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
               onClick={() => setOpen(false)}
               className="inline-flex items-center justify-center rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background"
+              suppressHydrationWarning
             >
               Get Started
             </Link>

@@ -11,7 +11,7 @@ import { InboxView } from "@/components/dashboard/inbox-view"
 import { CallsView } from "@/components/dashboard/calls-view"
 import { RulesView } from "@/components/dashboard/rules-view"
 import { CredentialModal } from "@/components/dashboard/credential-modal"
-import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { Users, Phone, Zap, MessageSquare } from "lucide-react"
 
 const viewTitles: Record<ViewType, string> = {
@@ -236,7 +236,7 @@ export default function DashboardPage() {
   const currentCredConfig = credentialConfigs[credService]
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-background" suppressHydrationWarning>
       <SidebarNav
         activeView={activeView}
         onViewChange={(view) => {
@@ -280,7 +280,7 @@ export default function DashboardPage() {
           </header>
 
           {/* Content */}
-          <ScrollArea className="flex-1">
+          <div className="flex-1 overflow-y-auto">
             <div className="flex flex-col gap-6 p-6">
               <CommandBar onCommand={handleCommand} />
 
@@ -300,7 +300,7 @@ export default function DashboardPage() {
                 <IntegrationsView onConnect={openCredentialModal} />
               )}
             </div>
-          </ScrollArea>
+          </div>
         </main>
 
         {/* Flow Detail Slide-in Panel */}

@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 import {
   LayoutDashboard,
   GitBranch,
@@ -11,6 +12,7 @@ import {
   Inbox,
   Phone,
   FileText,
+  LogOut,
 } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
@@ -38,6 +40,8 @@ export function SidebarNav({
   collapsed,
   onToggleCollapse,
 }: SidebarNavProps) {
+  const router = useRouter()
+
   return (
     <aside
       className={cn(
@@ -90,8 +94,28 @@ export function SidebarNav({
         })}
       </nav>
 
-      {/* Collapse Button */}
-      <div className="border-t border-border p-2">
+      {/* Log Out + Collapse */}
+      <div className="border-t border-border p-2 space-y-1">
+        {(() => {
+          const logoutBtn = (
+            <button
+              onClick={() => router.push("/")}
+              className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+            >
+              <LogOut className="size-4 shrink-0" />
+              {!collapsed && <span>Log Out</span>}
+            </button>
+          )
+          if (collapsed) {
+            return (
+              <Tooltip>
+                <TooltipTrigger asChild>{logoutBtn}</TooltipTrigger>
+                <TooltipContent side="right">Log Out</TooltipContent>
+              </Tooltip>
+            )
+          }
+          return logoutBtn
+        })()}
         <button
           onClick={onToggleCollapse}
           className="flex w-full items-center justify-center rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"

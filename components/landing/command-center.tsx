@@ -56,11 +56,10 @@ function SentimentBadge({ sentiment }: { sentiment: string }) {
   const isInterested = sentiment === "Interested"
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-        isInterested
-          ? "bg-emerald-50 text-emerald-700"
-          : "bg-amber-50 text-amber-700"
-      }`}
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${isInterested
+        ? "bg-emerald-50 text-emerald-700"
+        : "bg-amber-50 text-amber-700"
+        }`}
     >
       {sentiment}
     </span>
@@ -71,11 +70,10 @@ function StatusBadge({ status }: { status: string }) {
   const isReplied = status === "AI Replied"
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-        isReplied
-          ? "bg-emerald-50 text-emerald-700"
-          : "bg-secondary text-secondary-foreground"
-      }`}
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${isReplied
+        ? "bg-emerald-50 text-emerald-700"
+        : "bg-secondary text-secondary-foreground"
+        }`}
     >
       {status}
     </span>
@@ -84,9 +82,9 @@ function StatusBadge({ status }: { status: string }) {
 
 export function CommandCenter() {
   return (
-    <section className="px-6 py-24">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground">
+    <section className="px-6 py-24" suppressHydrationWarning>
+      <div className="mx-auto max-w-5xl" suppressHydrationWarning>
+        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground" suppressHydrationWarning>
           Unified Command Center
         </div>
         <h2 className="mb-12 text-3xl font-bold tracking-tight text-foreground md:text-4xl">

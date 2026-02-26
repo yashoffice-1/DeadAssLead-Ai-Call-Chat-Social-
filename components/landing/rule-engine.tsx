@@ -63,9 +63,9 @@ function RuleCard({
 
 export function RuleEngine() {
   return (
-    <section className="px-6 py-24">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground">
+    <section className="px-6 py-24" suppressHydrationWarning>
+      <div className="mx-auto max-w-5xl" suppressHydrationWarning>
+        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground" suppressHydrationWarning>
           Rule Engine
         </div>
         <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
