@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { SidebarNav, type ViewType } from "@/components/dashboard/sidebar-nav"
 import { CommandBar } from "@/components/dashboard/command-bar"
 import { OverviewView } from "@/components/dashboard/overview-view"
@@ -12,7 +12,24 @@ import { CallsView } from "@/components/dashboard/calls-view"
 import { RulesView } from "@/components/dashboard/rules-view"
 import { CredentialModal } from "@/components/dashboard/credential-modal"
 
-import { Users, Phone, Zap, MessageSquare } from "lucide-react"
+import {
+  Users,
+  Phone,
+  Zap,
+  MessageSquare,
+  Menu,
+  Bell,
+  Search,
+  GitBranch,
+  Inbox,
+  FileText,
+  Puzzle,
+  LayoutDashboard,
+  ArrowRight,
+  TrendingUp,
+  Activity,
+} from "lucide-react"
+import { cn } from "@/lib/utils"
 
 const viewTitles: Record<ViewType, string> = {
   overview: "Dashboard",
@@ -24,12 +41,21 @@ const viewTitles: Record<ViewType, string> = {
 }
 
 const viewDescriptions: Record<ViewType, string> = {
-  overview: "Monitor your active automations and event log",
+  overview: "Monitor active automations and real-time event log",
   flows: "Build and manage your automation pipelines",
   inbox: "Unified comments, DMs, and AI-drafted replies",
-  calls: "Inbound and outbound call logs with sentiment analysis",
+  calls: "Inbound & outbound call logs with sentiment analysis",
   rules: "Schedule AI-generated posts and manage publishing rules",
   integrations: "Connect your tools and services",
+}
+
+const viewIcons: Record<ViewType, React.ElementType> = {
+  overview: LayoutDashboard,
+  flows: GitBranch,
+  inbox: Inbox,
+  calls: Phone,
+  rules: FileText,
+  integrations: Puzzle,
 }
 
 // Credential step configs per service
@@ -164,6 +190,8 @@ export default function DashboardPage() {
   const [activeView, setActiveView] = useState<ViewType>("overview")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<Flow | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [viewKey, setViewKey] = useState(0) // for re-triggering animations
 
   // Credential modal state
   const [credModalOpen, setCredModalOpen] = useState(false)
@@ -174,20 +202,20 @@ export default function DashboardPage() {
     setCredModalOpen(true)
   }
 
+  const changeView = (view: ViewType) => {
+    setActiveView(view)
+    setSelectedFlow(null)
+    setViewKey((k) => k + 1) // trigger animation
+  }
+
   const handleCommand = useCallback(
     (command: string) => {
       const lower = command.toLowerCase()
 
-      // Check for service connection keywords
       const serviceKeywords: Record<string, string> = {
-        tiktok: "tiktok",
-        instagram: "instagram",
-        facebook: "facebook",
-        vapi: "vapi",
-        elevenlabs: "elevenlabs",
-        deepgram: "deepgram",
-        plivo: "plivo",
-        sendgrid: "sendgrid",
+        tiktok: "tiktok", instagram: "instagram", facebook: "facebook",
+        vapi: "vapi", elevenlabs: "elevenlabs", deepgram: "deepgram",
+        plivo: "plivo", sendgrid: "sendgrid",
       }
 
       for (const [key, keyword] of Object.entries(serviceKeywords)) {
@@ -197,108 +225,165 @@ export default function DashboardPage() {
         }
       }
 
-      // Route to flows if describing an automation
       if (lower.includes("flow") || lower.includes("automate") || lower.includes("when") || lower.includes("trigger")) {
-        setActiveView("flows")
-        return
+        changeView("flows"); return
       }
-
-      // Route to inbox for social messages
       if (lower.includes("dm") || lower.includes("reply") || lower.includes("inbox") || lower.includes("message") || lower.includes("comment")) {
-        setActiveView("inbox")
-        return
+        changeView("inbox"); return
       }
-
-      // Route to calls for voice-related queries
       if (lower.includes("call") || lower.includes("voice") || lower.includes("phone") || lower.includes("dial")) {
-        setActiveView("calls")
-        return
+        changeView("calls"); return
       }
-
-      // Route to rules for post-related queries
       if (lower.includes("post") || lower.includes("schedule") || lower.includes("rule") || lower.includes("publish")) {
-        setActiveView("rules")
-        return
+        changeView("rules"); return
       }
-
-      // Default: route to integrations for connect-like queries
       if (lower.includes("connect") || lower.includes("integrate") || lower.includes("api")) {
-        setActiveView("integrations")
-        return
+        changeView("integrations"); return
       }
-
-      // Fallback: stay on current view
-      setActiveView("overview")
+      changeView("overview")
     },
     []
   )
 
+  const CurrentViewIcon = viewIcons[activeView]
   const currentCredConfig = credentialConfigs[credService]
 
   return (
     <div className="flex h-screen overflow-hidden bg-background" suppressHydrationWarning>
       <SidebarNav
         activeView={activeView}
-        onViewChange={(view) => {
-          setActiveView(view)
-          setSelectedFlow(null)
-        }}
+        onViewChange={changeView}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        mobileOpen={mobileMenuOpen}
+        onMobileClose={() => setMobileMenuOpen(false)}
       />
 
-      <div className="flex flex-1 overflow-hidden">
-        <main className="flex flex-1 flex-col overflow-hidden">
-          {/* Header */}
-          <header className="flex shrink-0 flex-col border-b border-border bg-card">
-            <div className="flex items-center justify-between px-6 py-3">
-              <div>
-                <h1 className="text-sm font-semibold text-foreground">
-                  {viewTitles[activeView]}
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  {viewDescriptions[activeView]}
-                </p>
+      <div suppressHydrationWarning className="flex flex-1 flex-col overflow-hidden md:flex-row">
+        <main suppressHydrationWarning className="flex flex-1 flex-col overflow-hidden">
+          {/* Mobile Header */}
+          <div suppressHydrationWarning className="flex items-center gap-3 border-b border-border/60 bg-card/80 px-3 py-2.5 backdrop-blur-sm md:hidden">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="flex size-9 items-center justify-center rounded-lg text-foreground hover:bg-accent"
+              aria-label="Open menu"
+            >
+              <Menu className="size-5" />
+            </button>
+            <div suppressHydrationWarning className="flex items-center gap-2">
+              <div suppressHydrationWarning className="flex size-7 items-center justify-center rounded-lg bg-foreground shadow-sm">
+                <Zap className="size-3.5 text-background" />
               </div>
-              <div className="flex items-center gap-2 rounded-md border border-border px-2.5 py-1">
+              <span className="text-sm font-bold tracking-tight text-foreground">DeadAssLead</span>
+            </div>
+            <div suppressHydrationWarning className="ml-auto flex items-center gap-2">
+              <button className="flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent">
+                <Bell className="size-4" />
+              </button>
+              <div className="flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2 py-0.5">
                 <span className="relative flex size-1.5">
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />
                   <span className="relative inline-flex size-1.5 rounded-full bg-success" />
                 </span>
-                <span className="text-xs text-muted-foreground">
-                  Systems Online
-                </span>
+                <span className="text-[10px] font-medium text-success">Live</span>
               </div>
             </div>
-            {/* KPI Strip */}
-            <div className="flex items-center gap-6 border-t border-border px-6 py-2">
-              <KpiPill icon={Users} label="Leads" value="1,245" />
-              <KpiPill icon={Phone} label="Calls (24h)" value="34" />
-              <KpiPill icon={MessageSquare} label="Messages" value="312" />
-              <KpiPill icon={Zap} label="AI Actions" value="2,847" />
+          </div>
+
+          {/* Desktop Header */}
+          <header suppressHydrationWarning className="hidden shrink-0 flex-col border-b border-border/60 bg-card/80 backdrop-blur-sm md:flex">
+            <div suppressHydrationWarning className="flex items-center justify-between px-6 py-3">
+              <div suppressHydrationWarning className="flex items-center gap-3">
+                <div className="flex size-8 items-center justify-center rounded-lg bg-accent/80">
+                  <CurrentViewIcon className="size-4 text-foreground" />
+                </div>
+                <div>
+                  <h1 className="text-sm font-semibold text-foreground">
+                    {viewTitles[activeView]}
+                  </h1>
+                  <p className="text-xs text-muted-foreground">
+                    {viewDescriptions[activeView]}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <button className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                  <Search className="size-4" />
+                </button>
+                <button className="relative flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                  <Bell className="size-4" />
+                  <span className="absolute -right-0.5 -top-0.5 flex size-3.5 items-center justify-center rounded-full bg-destructive text-[8px] font-bold text-white">3</span>
+                </button>
+                <div className="flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2.5 py-1">
+                  <span className="relative flex size-1.5">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />
+                    <span className="relative inline-flex size-1.5 rounded-full bg-success" />
+                  </span>
+                  <span className="text-xs font-medium text-success">Systems Online</span>
+                </div>
+              </div>
+            </div>
+            {/* KPI Strip - Desktop */}
+            <div suppressHydrationWarning className="flex items-center gap-6 border-t border-border/40 px-6 py-2">
+              <KpiPill icon={Users} label="Leads" value="1,245" trend="+12%" positive />
+              <KpiPill icon={Phone} label="Calls (24h)" value="34" trend="+8%" positive />
+              <KpiPill icon={MessageSquare} label="Messages" value="312" trend="+23%" positive />
+              <KpiPill icon={Zap} label="AI Actions" value="2,847" trend="+5%" positive />
+              <KpiPill icon={Activity} label="Uptime" value="99.9%" />
             </div>
           </header>
 
+          {/* Mobile Page Title + KPI Row */}
+          <div suppressHydrationWarning className="flex flex-col border-b border-border/60 bg-card/50 md:hidden">
+            <div suppressHydrationWarning className="flex items-center gap-2.5 px-3 py-2.5">
+              <div className="flex size-7 items-center justify-center rounded-lg bg-accent/80">
+                <CurrentViewIcon className="size-3.5 text-foreground" />
+              </div>
+              <div>
+                <h1 className="text-sm font-semibold text-foreground">
+                  {viewTitles[activeView]}
+                </h1>
+                <p className="text-[11px] text-muted-foreground">
+                  {viewDescriptions[activeView]}
+                </p>
+              </div>
+            </div>
+            <div suppressHydrationWarning className="flex items-center gap-4 overflow-x-auto border-t border-border/40 px-3 py-2 no-scrollbar">
+              <KpiPill icon={Users} label="Leads" value="1,245" />
+              <KpiPill icon={Phone} label="Calls" value="34" />
+              <KpiPill icon={MessageSquare} label="Msgs" value="312" />
+              <KpiPill icon={Zap} label="AI" value="2,847" />
+            </div>
+          </div>
+
           {/* Content */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="flex flex-col gap-6 p-6">
+          <div suppressHydrationWarning className="flex-1 overflow-y-auto">
+            <div suppressHydrationWarning className="flex flex-col gap-4 p-3 sm:gap-6 sm:p-6">
               <CommandBar onCommand={handleCommand} />
 
+              {/* Quick Navigation Cards (visible on overview) */}
               {activeView === "overview" && (
-                <OverviewView onNavigateToFlows={() => setActiveView("flows")} />
+                <QuickNavGrid onNavigate={changeView} />
               )}
-              {activeView === "flows" && (
-                <FlowsView
-                  onSelectFlow={(flow) => setSelectedFlow(flow)}
-                  selectedFlowId={selectedFlow?.id}
-                />
-              )}
-              {activeView === "inbox" && <InboxView />}
-              {activeView === "calls" && <CallsView />}
-              {activeView === "rules" && <RulesView />}
-              {activeView === "integrations" && (
-                <IntegrationsView onConnect={openCredentialModal} />
-              )}
+
+              {/* Animated View Container */}
+              <div suppressHydrationWarning key={viewKey} className="animate-view-in">
+                {activeView === "overview" && (
+                  <OverviewView onNavigateToFlows={() => changeView("flows")} />
+                )}
+                {activeView === "flows" && (
+                  <FlowsView
+                    onSelectFlow={(flow) => setSelectedFlow(flow)}
+                    selectedFlowId={selectedFlow?.id}
+                  />
+                )}
+                {activeView === "inbox" && <InboxView />}
+                {activeView === "calls" && <CallsView />}
+                {activeView === "rules" && <RulesView />}
+                {activeView === "integrations" && (
+                  <IntegrationsView onConnect={openCredentialModal} />
+                )}
+              </div>
             </div>
           </div>
         </main>
@@ -328,12 +413,76 @@ export default function DashboardPage() {
   )
 }
 
-function KpiPill({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
+/* ---------- Sub-Components ---------- */
+
+function KpiPill({
+  icon: Icon,
+  label,
+  value,
+  trend,
+  positive,
+}: {
+  icon: React.ElementType
+  label: string
+  value: string
+  trend?: string
+  positive?: boolean
+}) {
   return (
-    <div className="flex items-center gap-2">
-      <Icon className="size-3.5 text-muted-foreground" />
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <span className="text-xs font-semibold text-foreground">{value}</span>
+    <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+      <Icon className="size-3 text-muted-foreground sm:size-3.5" />
+      <span className="whitespace-nowrap text-[10px] text-muted-foreground sm:text-xs">{label}</span>
+      <span className="whitespace-nowrap text-[10px] font-semibold text-foreground sm:text-xs">{value}</span>
+      {trend && (
+        <span className={cn(
+          "hidden items-center gap-0.5 text-[9px] font-medium sm:flex",
+          positive ? "text-success" : "text-destructive"
+        )}>
+          <TrendingUp className="size-2.5" />
+          {trend}
+        </span>
+      )}
+    </div>
+  )
+}
+
+function QuickNavGrid({ onNavigate }: { onNavigate: (view: ViewType) => void }) {
+  const cards: { view: ViewType; icon: React.ElementType; label: string; desc: string; accent: string; count?: string }[] = [
+    { view: "flows", icon: GitBranch, label: "Flow Builder", desc: "4 active flows", accent: "from-violet-500/10 to-purple-500/5 border-violet-500/20 hover:border-violet-500/40", count: "4" },
+    { view: "inbox", icon: Inbox, label: "Social Inbox", desc: "3 pending replies", accent: "from-blue-500/10 to-cyan-500/5 border-blue-500/20 hover:border-blue-500/40", count: "3" },
+    { view: "calls", icon: Phone, label: "Call History", desc: "5 interested leads", accent: "from-emerald-500/10 to-green-500/5 border-emerald-500/20 hover:border-emerald-500/40", count: "5" },
+    { view: "rules", icon: FileText, label: "Post Rules", desc: "3 active rules", accent: "from-amber-500/10 to-orange-500/5 border-amber-500/20 hover:border-amber-500/40", count: "3" },
+    { view: "integrations", icon: Puzzle, label: "Integrations", desc: "8 connected", accent: "from-pink-500/10 to-rose-500/5 border-pink-500/20 hover:border-pink-500/40", count: "8" },
+  ]
+
+  return (
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 sm:gap-3">
+      {cards.map((card, idx) => (
+        <button
+          key={card.view}
+          onClick={() => onNavigate(card.view)}
+          className={cn(
+            "group relative flex flex-col gap-2 overflow-hidden rounded-xl border bg-gradient-to-br p-3 text-left transition-all duration-300 hover:shadow-md sm:p-4",
+            card.accent,
+            "animate-card-enter"
+          )}
+          style={{ animationDelay: `${idx * 60}ms` }}
+        >
+          <div className="flex items-center justify-between">
+            <card.icon className="size-5 text-foreground/70 transition-transform duration-300 group-hover:scale-110 sm:size-6" />
+            {card.count && (
+              <span className="flex size-5 items-center justify-center rounded-full bg-foreground/10 text-[10px] font-bold text-foreground sm:size-6 sm:text-xs">
+                {card.count}
+              </span>
+            )}
+          </div>
+          <div>
+            <span className="text-xs font-semibold text-foreground sm:text-sm">{card.label}</span>
+            <p className="text-[10px] text-muted-foreground sm:text-xs">{card.desc}</p>
+          </div>
+          <ArrowRight className="absolute bottom-3 right-3 size-3.5 text-muted-foreground/0 transition-all duration-300 group-hover:text-muted-foreground/60 group-hover:translate-x-0.5 sm:size-4" />
+        </button>
+      ))}
     </div>
   )
 }

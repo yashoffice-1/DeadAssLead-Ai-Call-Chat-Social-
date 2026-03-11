@@ -1,22 +1,31 @@
 "use client"
 
-import { GripVertical, Clock, Phone, Share2 } from "lucide-react"
+import { GripVertical, Clock, Phone, Share2, Zap } from "lucide-react"
 
 const socialRules = [
   {
     icon: <Share2 className="h-4 w-4" />,
     label: "Post to Instagram",
     detail: "Every Monday, Wednesday, Friday at 10 AM",
+    color: "from-pink-50 to-rose-50",
+    iconBg: "bg-pink-100",
+    iconColor: "text-pink-600",
   },
   {
     icon: <Share2 className="h-4 w-4" />,
     label: "Post to TikTok",
     detail: "Daily at 6 PM — auto-generated from templates",
+    color: "from-slate-50 to-gray-50",
+    iconBg: "bg-slate-100",
+    iconColor: "text-slate-700",
   },
   {
     icon: <Clock className="h-4 w-4" />,
     label: "Story Reminder",
     detail: "Tuesdays & Thursdays — behind-the-scenes content",
+    color: "from-amber-50 to-yellow-50",
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
   },
 ]
 
@@ -25,16 +34,25 @@ const callRules = [
     icon: <Phone className="h-4 w-4" />,
     label: "Call new pricing leads",
     detail: "Within 5 minutes of DM — ElevenLabs 'Adam' voice",
+    color: "from-emerald-50 to-green-50",
+    iconBg: "bg-emerald-100",
+    iconColor: "text-emerald-600",
   },
   {
     icon: <Phone className="h-4 w-4" />,
     label: "Follow-up calls",
     detail: "48 hours after first contact — if no reply",
+    color: "from-blue-50 to-indigo-50",
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
   },
   {
     icon: <Clock className="h-4 w-4" />,
     label: "Weekly check-in calls",
     detail: "Every Friday at 2 PM — for active prospects",
+    color: "from-violet-50 to-purple-50",
+    iconBg: "bg-violet-100",
+    iconColor: "text-violet-600",
   },
 ]
 
@@ -42,20 +60,29 @@ function RuleCard({
   icon,
   label,
   detail,
+  color,
+  iconBg,
+  iconColor,
 }: {
   icon: React.ReactNode
   label: string
   detail: string
+  color: string
+  iconBg: string
+  iconColor: string
 }) {
   return (
-    <div className="group flex items-center gap-4 rounded-lg border border-border bg-background px-4 py-3 transition-colors hover:bg-secondary/50">
-      <GripVertical className="h-4 w-4 shrink-0 text-muted-foreground/50 cursor-grab" />
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-secondary text-secondary-foreground">
+    <div className={`group flex items-center gap-3 rounded-xl border border-border bg-gradient-to-r ${color} px-3 py-3 transition-all duration-300 hover:shadow-md hover:border-border/60 hover:-translate-y-0.5 sm:gap-4 sm:px-4 sm:py-4`}>
+      <GripVertical className="hidden h-4 w-4 shrink-0 text-muted-foreground/30 cursor-grab transition-colors group-hover:text-muted-foreground/60 sm:block" />
+      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${iconBg} ${iconColor} sm:h-9 sm:w-9`}>
         {icon}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium text-foreground">{label}</div>
-        <div className="truncate text-xs text-muted-foreground">{detail}</div>
+        <div className="text-xs font-medium text-foreground sm:text-sm">{label}</div>
+        <div className="truncate text-[10px] text-muted-foreground sm:text-xs">{detail}</div>
+      </div>
+      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 opacity-0 transition-opacity group-hover:opacity-100">
+        <Zap className="h-3 w-3 text-emerald-600" />
       </div>
     </div>
   )
@@ -63,35 +90,41 @@ function RuleCard({
 
 export function RuleEngine() {
   return (
-    <section className="px-6 py-24" suppressHydrationWarning>
+    <section className="relative px-4 py-16 overflow-hidden sm:px-6 sm:py-24" suppressHydrationWarning>
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute right-0 top-1/4 h-[300px] w-[300px] rounded-full bg-gradient-to-l from-violet-100/30 to-transparent blur-3xl sm:h-[400px] sm:w-[400px]" />
+      </div>
+
       <div className="mx-auto max-w-5xl" suppressHydrationWarning>
-        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground" suppressHydrationWarning>
+        <div className="mb-2 inline-flex items-center rounded-full border border-border bg-white/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground shadow-sm backdrop-blur-sm" suppressHydrationWarning>
           Rule Engine
         </div>
-        <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+        <h2 className="mb-3 text-2xl font-bold tracking-tight text-foreground sm:mb-4 sm:text-3xl md:text-4xl">
           Automate your schedule. Own your pipeline.
         </h2>
-        <p className="mb-12 max-w-xl text-muted-foreground leading-relaxed">
+        <p className="mb-8 max-w-xl text-sm text-muted-foreground leading-relaxed sm:mb-12 sm:text-base">
           Drag and drop rules for social media posting and outbound calling. The AI
           manages your entire schedule — tracking every post and every call.
         </p>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            <h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:mb-4 sm:text-sm">
+              <Share2 className="h-3.5 w-3.5" />
               Social Posting Rules
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {socialRules.map((rule) => (
                 <RuleCard key={rule.label} {...rule} />
               ))}
             </div>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            <h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:mb-4 sm:text-sm">
+              <Phone className="h-3.5 w-3.5" />
               Outbound Calling Rules
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {callRules.map((rule) => (
                 <RuleCard key={rule.label} {...rule} />
               ))}

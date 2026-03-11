@@ -76,29 +76,29 @@ export function IntegrationsView({ onConnect }: IntegrationsViewProps) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-foreground">Integrations</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-base font-semibold text-foreground sm:text-lg">Integrations</h2>
+          <p className="text-xs text-muted-foreground sm:text-sm">
             {connectedCount} of {integrations.length} services connected
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1.5">
+        <Button size="sm" variant="outline" className="gap-1.5 w-full sm:w-auto">
           <Key className="size-3" />
           API Keys
         </Button>
       </div>
 
       {/* Filters */}
-      <div className="flex gap-1.5">
+      <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
         {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setFilter(cat.id)}
             className={cn(
-              "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
+              "shrink-0 rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
               filter === cat.id
                 ? "bg-foreground text-background"
                 : "bg-accent text-muted-foreground hover:text-foreground"
@@ -110,12 +110,12 @@ export function IntegrationsView({ onConnect }: IntegrationsViewProps) {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((integration) => (
-          <div key={integration.id} className="flex flex-col gap-4 bg-card p-4">
+          <div key={integration.id} className="flex flex-col gap-4 bg-card p-3 transition-all duration-200 hover:bg-accent/30 sm:p-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-md border border-border bg-accent/50">
+                <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-accent/50 transition-transform duration-200 hover:scale-105">
                   <integration.icon className="size-4" style={{ color: integration.brandColor }} />
                 </div>
                 <div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowRight, Loader2 } from "lucide-react"
+import { ArrowRight, Loader2, Rocket, Sparkles } from "lucide-react"
 
 export function SignupSection() {
   const [email, setEmail] = useState("")
@@ -21,24 +21,32 @@ export function SignupSection() {
 
   if (submitted) {
     return (
-      <section id="signup" className="px-6 py-24" suppressHydrationWarning>
+      <section id="signup" className="px-4 py-16 sm:px-6 sm:py-24" suppressHydrationWarning>
         <div className="mx-auto max-w-3xl" suppressHydrationWarning>
-          <div className="rounded-xl border border-border bg-background p-8">
-            <div className="mb-6 flex items-center gap-2 border-b border-border pb-4">
-              <div className="h-3 w-3 rounded-full bg-emerald-500" />
-              <span className="text-sm font-medium text-foreground">DeadAssLead Dashboard</span>
+          <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-lg">
+            <div className="mb-4 flex items-center gap-2 border-b border-border px-4 pt-4 pb-3 sm:mb-6 sm:px-8 sm:pt-6 sm:pb-4">
+              <div className="h-3 w-3 rounded-full bg-emerald-400" />
+              <span className="text-xs font-medium text-foreground sm:text-sm">DeadAssLead Dashboard</span>
             </div>
-            <p className="mb-6 text-sm text-muted-foreground">
-              Welcome, {name}. Your private AI instance is deploying. Start by typing your first command.
-            </p>
-            <div className="flex items-center gap-2 rounded-lg border border-border px-4 py-3">
-              <span className="text-sm text-muted-foreground">{">"}</span>
-              <input
-                readOnly
-                className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-                placeholder="Make a Great Start — type your first command..."
-              />
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+            <div className="px-4 pb-6 sm:px-8 sm:pb-8">
+              <div className="mb-4 flex items-start gap-2 rounded-lg bg-emerald-50 px-3 py-2.5 border border-emerald-200/60 sm:items-center sm:px-4 sm:py-3">
+                <Sparkles className="h-4 w-4 shrink-0 text-emerald-600 mt-0.5 sm:mt-0" />
+                <p className="text-xs text-emerald-700 sm:text-sm">
+                  Welcome, {name}. Your private AI instance is deploying.
+                </p>
+              </div>
+              <p className="mb-4 text-xs text-muted-foreground sm:mb-6 sm:text-sm">
+                Start by typing your first command below.
+              </p>
+              <div className="flex items-center gap-2 rounded-xl border border-border bg-secondary/30 px-3 py-2.5 sm:px-4 sm:py-3">
+                <span className="text-xs text-muted-foreground sm:text-sm">{">"}</span>
+                <input
+                  readOnly
+                  className="flex-1 bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground sm:text-sm"
+                  placeholder="Make a Great Start — type your first command..."
+                />
+                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              </div>
             </div>
           </div>
         </div>
@@ -47,22 +55,30 @@ export function SignupSection() {
   }
 
   return (
-    <section id="signup" className="px-6 py-24" suppressHydrationWarning>
+    <section id="signup" className="relative px-4 py-16 overflow-hidden sm:px-6 sm:py-24" suppressHydrationWarning>
+      {/* Background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 h-[350px] w-[500px] -translate-x-1/2 rounded-full bg-gradient-to-br from-blue-100/40 via-violet-100/30 to-emerald-100/20 blur-3xl sm:h-[500px] sm:w-[700px]" />
+      </div>
+
       <div className="mx-auto max-w-3xl text-center" suppressHydrationWarning>
-        <div className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground" suppressHydrationWarning>
-          Get Started
+        <div className="mb-2 flex justify-center" suppressHydrationWarning>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground shadow-sm backdrop-blur-sm">
+            <Rocket className="h-3 w-3" />
+            Get Started
+          </span>
         </div>
-        <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+        <h2 className="mb-3 text-2xl font-bold tracking-tight text-foreground sm:mb-4 sm:text-3xl md:text-4xl">
           Ready to Deploy?
         </h2>
-        <p className="mx-auto mb-12 max-w-md text-muted-foreground leading-relaxed">
+        <p className="mx-auto mb-8 max-w-md text-sm text-muted-foreground leading-relaxed sm:mb-12 sm:text-base">
           Sign up and your private AI instance begins deploying immediately.
           No credit card required for the free plan.
         </p>
 
         <form
           onSubmit={handleSubmit}
-          className="mx-auto max-w-md space-y-4"
+          className="mx-auto max-w-md space-y-3 sm:space-y-4"
         >
           <input
             type="text"
@@ -70,7 +86,7 @@ export function SignupSection() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Your name"
             required
-            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground"
+            className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground outline-none shadow-sm transition-all placeholder:text-muted-foreground focus:border-foreground/30 focus:shadow-md focus:ring-1 focus:ring-foreground/10 sm:py-3.5"
           />
           <input
             type="email"
@@ -78,12 +94,12 @@ export function SignupSection() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
             required
-            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground"
+            className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground outline-none shadow-sm transition-all placeholder:text-muted-foreground focus:border-foreground/30 focus:shadow-md focus:ring-1 focus:ring-foreground/10 sm:py-3.5"
           />
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-foreground px-8 py-3 text-sm font-medium text-background transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-70"
+            className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-foreground px-8 py-3 text-sm font-medium text-background transition-all hover:shadow-xl hover:shadow-foreground/10 active:scale-[0.97] disabled:opacity-70 sm:py-3.5"
           >
             {loading ? (
               <>
@@ -92,12 +108,17 @@ export function SignupSection() {
               </>
             ) : (
               <>
-                Make a Great Start
-                <ArrowRight className="h-4 w-4" />
+                <span className="relative z-10">Make a Great Start</span>
+                <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </>
             )}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "shimmer 3s ease-in-out infinite", backgroundSize: "200% 100%" }} />
           </button>
         </form>
+
+        <p className="mt-4 text-[10px] text-muted-foreground sm:mt-6 sm:text-xs">
+          Free plan includes 100 contacts · No credit card required · Deploy in 60 seconds
+        </p>
       </div>
     </section>
   )

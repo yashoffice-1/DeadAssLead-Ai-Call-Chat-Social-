@@ -26,7 +26,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 
 export interface FlowNode {
@@ -130,17 +129,17 @@ export function FlowsView({ onSelectFlow, selectedFlowId }: FlowsViewProps) {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-foreground">My Flows</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-base font-semibold text-foreground sm:text-lg">My Flows</h2>
+          <p className="text-xs text-muted-foreground sm:text-sm">
             {flows.filter((f) => f.active).length} active of {flows.length} flows
           </p>
         </div>
         <Button
           size="sm"
           onClick={() => setShowNewFlow(true)}
-          className="gap-1.5"
+          className="gap-1.5 w-full sm:w-auto"
         >
           <Plus className="size-3.5" />
           New Flow
@@ -176,20 +175,18 @@ export function FlowsView({ onSelectFlow, selectedFlowId }: FlowsViewProps) {
       )}
 
       {/* Flow Cards */}
-      <ScrollArea className="h-[calc(100vh-16rem)]">
-        <div className="flex flex-col gap-3 pr-3">
-          {flows.map((flow) => (
-            <FlowCard
-              key={flow.id}
-              flow={flow}
-              selected={selectedFlowId === flow.id}
-              onSelect={() => onSelectFlow(flow)}
-              onToggle={() => toggleFlow(flow.id)}
-              onDelete={() => deleteFlow(flow.id)}
-            />
-          ))}
-        </div>
-      </ScrollArea>
+      <div className="flex flex-col gap-3">
+        {flows.map((flow) => (
+          <FlowCard
+            key={flow.id}
+            flow={flow}
+            selected={selectedFlowId === flow.id}
+            onSelect={() => onSelectFlow(flow)}
+            onToggle={() => toggleFlow(flow.id)}
+            onDelete={() => deleteFlow(flow.id)}
+          />
+        ))}
+      </div>
     </div>
   )
 }
@@ -236,7 +233,7 @@ function FlowCard({
       )}
       onClick={onSelect}
     >
-      <CardContent className="p-4">
+      <CardContent className="p-3 sm:p-4">
         <div className="flex flex-col gap-3">
           {/* Title row */}
           <div className="flex items-start justify-between">
@@ -265,9 +262,9 @@ function FlowCard({
           </div>
 
           {/* Visual Node Map */}
-          <div className="flex items-center gap-0 overflow-x-auto py-1">
+          <div className="flex items-center gap-0 overflow-x-auto py-1 no-scrollbar">
             {flow.nodes.map((node, i) => (
-              <div key={node.id} className="flex items-center">
+              <div key={node.id} className="flex shrink-0 items-center">
                 <div
                   className={cn(
                     "flex items-center gap-2 rounded-md border px-3 py-1.5",

@@ -13,31 +13,13 @@ export default function Home() {
     <main className="min-h-screen bg-background" suppressHydrationWarning>
       <Navbar />
       <HeroSection />
-      <div className="mx-auto max-w-6xl px-0">
-        <hr className="border-border" />
-      </div>
       <ConnectionHub />
-      <div className="mx-auto max-w-6xl px-0">
-        <hr className="border-border" />
-      </div>
       <ConversationalSetup />
-      <div className="mx-auto max-w-6xl px-0">
-        <hr className="border-border" />
-      </div>
       <CommandCenter />
-      <div className="mx-auto max-w-6xl px-0">
-        <hr className="border-border" />
-      </div>
       <RuleEngine />
-      <div className="mx-auto max-w-6xl px-0">
-        <hr className="border-border" />
-      </div>
       <section id="pricing">
         <PricingSection />
       </section>
-      <div className="mx-auto max-w-6xl px-0">
-        <hr className="border-border" />
-      </div>
       <SignupSection />
       <Footer />
     </main>

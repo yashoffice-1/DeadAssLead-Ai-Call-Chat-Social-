@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
+import { PostRuleBuilder } from "./post-rule-builder"
 
 interface PostRule {
   id: string
@@ -87,9 +88,9 @@ const rules: PostRule[] = [
 const scheduledPosts: ScheduledPost[] = [
   { id: "p1", platform: "tiktok", scheduledDate: "Mon, Feb 24", scheduledTime: "9:00 AM", caption: "5 ways AI is changing how creators manage DMs. #AItools #CreatorEconomy", status: "scheduled", creativeType: "video" },
   { id: "p2", platform: "instagram", scheduledDate: "Wed, Feb 26", scheduledTime: "12:00 PM", caption: "Swipe through our top 5 AI marketing tips for 2026...", status: "scheduled", creativeType: "carousel" },
-  { id: "p3", platform: "instagram", scheduledDate: "Today", scheduledTime: "8:00 AM", caption: "A day in the life at NexusAI HQ. New features loading...", status: "posted", creativeType: "image" },
-  { id: "p4", platform: "facebook", scheduledDate: "Yesterday", scheduledTime: "3:00 PM", caption: "Introducing Smart Reply v2 - now with multi-language support! Book a demo: nexusai.com/demo", status: "posted", creativeType: "image" },
-  { id: "p5", platform: "tiktok", scheduledDate: "Feb 17", scheduledTime: "9:00 AM", caption: "POV: Your AI assistant just booked 12 demos while you slept. #NexusAI #Automation", status: "posted", creativeType: "video" },
+  { id: "p3", platform: "instagram", scheduledDate: "Today", scheduledTime: "8:00 AM", caption: "A day in the life at DeadAssLead HQ. New features loading...", status: "posted", creativeType: "image" },
+  { id: "p4", platform: "facebook", scheduledDate: "Yesterday", scheduledTime: "3:00 PM", caption: "Introducing Smart Reply v2 - now with multi-language support! Book a demo: deadasslead.com/demo", status: "posted", creativeType: "image" },
+  { id: "p5", platform: "tiktok", scheduledDate: "Feb 17", scheduledTime: "9:00 AM", caption: "POV: Your AI assistant just booked 12 demos while you slept. #DeadAssLead #Automation", status: "posted", creativeType: "video" },
   { id: "p6", platform: "instagram", scheduledDate: "Feb 19", scheduledTime: "12:00 PM", caption: "The complete guide to AI-powered social media management (link in bio)", status: "failed", creativeType: "carousel" },
 ]
 
@@ -108,6 +109,8 @@ const creativeIcons: Record<string, React.ElementType> = {
 export function RulesView() {
   const [activeRules, setActiveRules] = useState<PostRule[]>(rules)
   const [tab, setTab] = useState<"rules" | "tracker">("rules")
+  const [isCreatingRule, setIsCreatingRule] = useState(false)
+  const [editingRule, setEditingRule] = useState<PostRule | null>(null)
 
   const toggleRule = (id: string) => {
     setActiveRules((prev) =>
@@ -115,16 +118,39 @@ export function RulesView() {
     )
   }
 
+  const deleteRule = (id: string) => {
+    setActiveRules((prev) => prev.filter((r) => r.id !== id))
+  }
+
+  if (isCreatingRule || editingRule) {
+    return (
+      <PostRuleBuilder 
+        onBack={() => {
+          setIsCreatingRule(false)
+          setEditingRule(null)
+        }} 
+        onSave={() => {
+          setIsCreatingRule(false)
+          setEditingRule(null)
+        }} 
+        initialName={editingRule?.name}
+        initialPlatform={editingRule?.platform}
+        initialSchedule={editingRule?.schedule}
+        initialPrompt={editingRule?.prompt}
+      />
+    )
+  }
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-4 sm:gap-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-foreground">AI Post Rules</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-base font-semibold text-foreground sm:text-lg">AI Post Rules</h2>
+          <p className="text-xs text-muted-foreground sm:text-sm">
             {activeRules.filter((r) => r.enabled).length} active rules, {scheduledPosts.filter((p) => p.status === "scheduled").length} upcoming posts
           </p>
         </div>
-        <Button size="sm" className="gap-1.5">
+        <Button size="sm" className="gap-1.5 w-full sm:w-auto" onClick={() => setIsCreatingRule(true)}>
           <Plus className="size-3.5" />
           New Rule
         </Button>
@@ -161,8 +187,8 @@ export function RulesView() {
           {activeRules.map((rule) => {
             const PlatformIcon = platformIcons[rule.platform]
             return (
-              <Card key={rule.id} className={cn("border transition-colors", !rule.enabled && "opacity-60")}>
-                <CardContent className="p-4">
+              <Card key={rule.id} className={cn("border transition-all duration-200 hover:shadow-sm hover:border-foreground/15", !rule.enabled && "opacity-60")}>
+                <CardContent className="p-3 sm:p-4">
                   <div className="flex flex-col gap-3">
                     {/* Header */}
                     <div className="flex items-start justify-between">
@@ -213,11 +239,21 @@ export function RulesView() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs text-muted-foreground hover:text-foreground">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-7 gap-1 text-xs text-muted-foreground hover:text-foreground"
+                        onClick={() => setEditingRule(rule)}
+                      >
                         <Edit2 className="size-3" />
                         Edit
                       </Button>
-                      <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs text-muted-foreground hover:text-destructive">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-7 gap-1 text-xs text-muted-foreground hover:text-destructive"
+                        onClick={() => deleteRule(rule.id)}
+                      >
                         <Trash2 className="size-3" />
                         Delete
                       </Button>
@@ -232,10 +268,10 @@ export function RulesView() {
 
       {tab === "tracker" && (
         <Card className="border">
-          <ScrollArea className="h-[calc(100vh-20rem)]">
+          <ScrollArea className="h-[calc(100vh-18rem)] sm:h-[calc(100vh-20rem)]">
             <div className="flex flex-col">
-              {/* Header */}
-              <div className="flex items-center gap-4 border-b border-border bg-accent/50 px-4 py-2.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              {/* Header - Desktop only */}
+              <div className="sticky top-0 z-10 hidden items-center gap-4 border-b border-border bg-accent/50 px-4 py-2.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground md:flex">
                 <span className="w-[100px]">Date</span>
                 <span className="w-[80px]">Platform</span>
                 <span className="w-[70px]">Type</span>
@@ -248,36 +284,43 @@ export function RulesView() {
                 const CreativeIcon = creativeIcons[post.creativeType] || Image
                 const status = statusConfig[post.status]
                 return (
-                  <div
-                    key={post.id}
-                    className="flex items-center gap-4 border-b border-border px-4 py-3 transition-colors hover:bg-accent/30"
-                  >
-                    {/* Date */}
-                    <div className="w-[100px]">
-                      <span className="text-xs font-medium text-foreground">{post.scheduledDate}</span>
-                      <p className="text-[10px] text-muted-foreground">{post.scheduledTime}</p>
+                  <div key={post.id}>
+                    {/* Mobile card */}
+                    <div className="flex flex-col gap-2 border-b border-border p-3 transition-colors hover:bg-accent/30 md:hidden">
+                      <div className="flex items-center gap-2">
+                        <div className="flex size-7 items-center justify-center rounded-md border border-border bg-accent/50">
+                          <PlatformIcon className="size-3.5 text-muted-foreground" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-xs font-medium text-foreground">{post.scheduledDate}</span>
+                          <span className="text-[10px] text-muted-foreground"> · {post.scheduledTime}</span>
+                        </div>
+                        <Badge className={cn("shrink-0 border-transparent text-[10px]", status.bg, status.color)}>
+                          {status.label}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-foreground line-clamp-2 pl-9">{post.caption}</p>
                     </div>
-
-                    {/* Platform */}
-                    <div className="flex w-[80px] items-center gap-1.5">
-                      <PlatformIcon className="size-3.5 text-muted-foreground" />
-                      <span className="text-xs capitalize text-muted-foreground">{post.platform}</span>
-                    </div>
-
-                    {/* Type */}
-                    <div className="flex w-[70px] items-center gap-1.5">
-                      <CreativeIcon className="size-3 text-muted-foreground" />
-                      <span className="text-xs capitalize text-muted-foreground">{post.creativeType}</span>
-                    </div>
-
-                    {/* Caption */}
-                    <p className="flex-1 truncate text-xs text-foreground">{post.caption}</p>
-
-                    {/* Status */}
-                    <div className="w-[90px]">
-                      <Badge className={cn("border-transparent text-[10px]", status.bg, status.color)}>
-                        {status.label}
-                      </Badge>
+                    {/* Desktop row */}
+                    <div className="hidden items-center gap-4 border-b border-border px-4 py-3 transition-colors hover:bg-accent/30 md:flex">
+                      <div className="w-[100px]">
+                        <span className="text-xs font-medium text-foreground">{post.scheduledDate}</span>
+                        <p className="text-[10px] text-muted-foreground">{post.scheduledTime}</p>
+                      </div>
+                      <div className="flex w-[80px] items-center gap-1.5">
+                        <PlatformIcon className="size-3.5 text-muted-foreground" />
+                        <span className="text-xs capitalize text-muted-foreground">{post.platform}</span>
+                      </div>
+                      <div className="flex w-[70px] items-center gap-1.5">
+                        <CreativeIcon className="size-3 text-muted-foreground" />
+                        <span className="text-xs capitalize text-muted-foreground">{post.creativeType}</span>
+                      </div>
+                      <p className="flex-1 truncate text-xs text-foreground">{post.caption}</p>
+                      <div className="w-[90px]">
+                        <Badge className={cn("border-transparent text-[10px]", status.bg, status.color)}>
+                          {status.label}
+                        </Badge>
+                      </div>
                     </div>
                   </div>
                 )

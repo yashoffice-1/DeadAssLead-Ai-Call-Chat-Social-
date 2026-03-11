@@ -158,20 +158,20 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
   const [hoveredFlow, setHoveredFlow] = useState<string | null>(null)
 
   return (
-    <div className="flex flex-col gap-6">
+    <div suppressHydrationWarning className="flex flex-col gap-6">
       {/* Stats Row */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <StatCard label="Active Flows" value="4" />
-        <StatCard label="Total Leads" value="1,245" />
-        <StatCard label="Calls (24h)" value="34" />
-        <StatCard label="Messages Sent" value="312" />
-        <StatCard label="AI Actions" value="2,847" />
-        <StatCard label="Post Rules" value="3" />
+      <div suppressHydrationWarning className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+        <StatCard label="Active Flows" value="4" icon={GitBranch} change="+1" accent="violet" delay={0} />
+        <StatCard label="Total Leads" value="1,245" icon={Zap} change="+12%" accent="blue" delay={60} />
+        <StatCard label="Calls (24h)" value="34" icon={Phone} change="+8%" accent="emerald" delay={120} />
+        <StatCard label="Messages Sent" value="312" icon={MessageSquare} change="+23%" accent="cyan" delay={180} />
+        <StatCard label="AI Actions" value="2,847" icon={Bot} change="+5%" accent="amber" delay={240} />
+        <StatCard label="Post Rules" value="3" icon={Activity} accent="pink" delay={300} />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+      <div suppressHydrationWarning className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         {/* Active Automations - 3 cols */}
-        <div className="flex flex-col gap-4 lg:col-span-3">
+        <div suppressHydrationWarning className="flex flex-col gap-4 lg:col-span-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground">Active Automations</h2>
             <Button
@@ -307,13 +307,52 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
   )
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
+const accentColors: Record<string, { icon: string; bg: string; text: string }> = {
+  violet: { icon: "text-violet-600", bg: "bg-violet-50", text: "text-violet-600" },
+  blue: { icon: "text-blue-600", bg: "bg-blue-50", text: "text-blue-600" },
+  emerald: { icon: "text-emerald-600", bg: "bg-emerald-50", text: "text-emerald-600" },
+  cyan: { icon: "text-cyan-600", bg: "bg-cyan-50", text: "text-cyan-600" },
+  amber: { icon: "text-amber-600", bg: "bg-amber-50", text: "text-amber-600" },
+  pink: { icon: "text-pink-600", bg: "bg-pink-50", text: "text-pink-600" },
+}
+
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  change,
+  accent = "blue",
+  delay = 0,
+}: {
+  label: string
+  value: string
+  icon?: React.ElementType
+  change?: string
+  accent?: string
+  delay?: number
+}) {
+  const colors = accentColors[accent] || accentColors.blue
   return (
-    <Card className="border">
-      <CardContent className="py-5">
-        <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium text-muted-foreground">{label}</span>
-          <span className="text-2xl font-bold tracking-tight text-foreground">{value}</span>
+    <Card
+      className="group border transition-all duration-200 hover:border-foreground/15 hover:shadow-sm animate-card-enter"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <CardContent className="py-4">
+        <div className="flex items-start justify-between">
+          {Icon && (
+            <div className={cn("flex size-8 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-105", colors.bg)}>
+              <Icon className={cn("size-4", colors.icon)} />
+            </div>
+          )}
+          {change && (
+            <span className="flex items-center gap-0.5 rounded-full bg-success/10 px-1.5 py-0.5 text-[9px] font-semibold text-success">
+              ↑{change}
+            </span>
+          )}
+        </div>
+        <div className="mt-2 flex flex-col gap-0.5">
+          <span className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{value}</span>
+          <span className="text-[10px] font-medium text-muted-foreground sm:text-xs">{label}</span>
         </div>
       </CardContent>
     </Card>
