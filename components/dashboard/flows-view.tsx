@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
 import {
   Plus,
   Play,
@@ -35,6 +36,7 @@ export interface FlowNode {
   service: string
   icon: React.ElementType
   color: string
+  darkColor?: string
 }
 
 export interface Flow {
@@ -55,9 +57,9 @@ const sampleFlows: Flow[] = [
     description: "Auto-reply to TikTok DMs and route hot leads to voice calls",
     active: true,
     nodes: [
-      { id: "n1", type: "trigger", label: "New TikTok DM", service: "TikTok", icon: Clapperboard, color: "#0a0a0a" },
-      { id: "n2", type: "processor", label: "OpenAI Processing", service: "OpenAI", icon: Bot, color: "#0a0a0a" },
-      { id: "n3", type: "action", label: "Vapi Voice Call", service: "Vapi", icon: PhoneCall, color: "#0a0a0a" },
+      { id: "n1", type: "trigger", label: "New TikTok DM", service: "TikTok", icon: Clapperboard, color: "#0a0a0a", darkColor: "#ffffff" },
+      { id: "n2", type: "processor", label: "OpenAI Processing", service: "OpenAI", icon: Bot, color: "#0a0a0a", darkColor: "#ffffff" },
+      { id: "n3", type: "action", label: "Vapi Voice Call", service: "Vapi", icon: PhoneCall, color: "#0a0a0a", darkColor: "#3b82f6" },
     ],
     rules: ["If DM mentions 'Booking', call via Vapi", "If sentiment is negative, route to human"],
     lastTriggered: "2m ago",
@@ -70,7 +72,7 @@ const sampleFlows: Flow[] = [
     active: true,
     nodes: [
       { id: "n4", type: "trigger", label: "New IG Message", service: "Instagram", icon: Instagram, color: "#E4405F" },
-      { id: "n5", type: "processor", label: "AI Analysis", service: "OpenAI", icon: Bot, color: "#0a0a0a" },
+      { id: "n5", type: "processor", label: "AI Analysis", service: "OpenAI", icon: Bot, color: "#0a0a0a", darkColor: "#ffffff" },
       { id: "n6", type: "action", label: "Auto Reply", service: "Instagram", icon: MessageSquare, color: "#E4405F" },
     ],
     rules: ["If question about pricing, include link", "Max 3 auto-replies per conversation"],
@@ -85,7 +87,7 @@ const sampleFlows: Flow[] = [
     nodes: [
       { id: "n7", type: "trigger", label: "New FB Comment", service: "Facebook", icon: Facebook, color: "#1877F2" },
       { id: "n8", type: "processor", label: "Sentiment Check", service: "Deepgram", icon: Mic, color: "#10b981" },
-      { id: "n9", type: "action", label: "ElevenLabs TTS", service: "ElevenLabs", icon: AudioLines, color: "#0a0a0a" },
+      { id: "n9", type: "action", label: "ElevenLabs TTS", service: "ElevenLabs", icon: AudioLines, color: "#0a0a0a", darkColor: "#8b5cf6" },
     ],
     rules: ["Only process comments with 'interested' keyword", "Generate voice memo for sales team"],
     lastTriggered: "3h ago",
@@ -98,8 +100,8 @@ const sampleFlows: Flow[] = [
     active: true,
     nodes: [
       { id: "n10", type: "trigger", label: "New Lead Added", service: "Webhook", icon: Zap, color: "#f59e0b" },
-      { id: "n11", type: "processor", label: "AI Script Gen", service: "OpenAI", icon: Bot, color: "#0a0a0a" },
-      { id: "n12", type: "action", label: "Vapi Outbound Call", service: "Vapi", icon: PhoneCall, color: "#0a0a0a" },
+      { id: "n11", type: "processor", label: "AI Script Gen", service: "OpenAI", icon: Bot, color: "#0a0a0a", darkColor: "#ffffff" },
+      { id: "n12", type: "action", label: "Vapi Outbound Call", service: "Vapi", icon: PhoneCall, color: "#0a0a0a", darkColor: "#3b82f6" },
     ],
     rules: ["Call between 9am-6pm only", "If voicemail, send follow-up DM"],
     lastTriggered: "12m ago",
@@ -225,6 +227,11 @@ function FlowCard({
   onToggle: () => void
   onDelete: () => void
 }) {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const isDark = mounted && resolvedTheme === "dark"
+
   return (
     <Card
       className={cn(
@@ -273,7 +280,7 @@ function FlowCard({
                     node.type === "action" && "border-border bg-accent"
                   )}
                 >
-                  <node.icon className="size-3.5" style={{ color: node.color }} />
+                  <node.icon className="size-3.5" style={{ color: isDark && node.darkColor ? node.darkColor : node.color }} />
                   <div className="flex flex-col">
                     <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                       {node.type}

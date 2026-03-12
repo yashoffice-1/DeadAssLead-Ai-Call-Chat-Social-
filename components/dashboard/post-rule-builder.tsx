@@ -48,6 +48,8 @@ export function PostRuleBuilder({
 
   const [ruleName, setRuleName] = useState(initialName)
   const [schedulePattern, setSchedulePattern] = useState(initialSchedule)
+  const [scheduleDate, setScheduleDate] = useState("")
+  const [scheduleTime, setScheduleTime] = useState("")
   const [promptContent, setPromptContent] = useState(initialPrompt)
 
   return (
@@ -164,13 +166,21 @@ export function PostRuleBuilder({
 
               {triggerType === "schedule" ? (
                 <div className="flex flex-col gap-2">
-                  <Label className="text-xs">Schedule Pattern (Cron or Natural Language)</Label>
-                  <Input 
-                    placeholder="e.g. Every Monday at 9:00 AM" 
-                    className="h-9 text-sm" 
-                    value={schedulePattern}
-                    onChange={(e) => setSchedulePattern(e.target.value)}
-                  />
+                  <Label className="text-xs">Schedule Date & Time</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input 
+                      type="date"
+                      className="h-9 text-sm w-full dark:[color-scheme:dark]" 
+                      value={scheduleDate}
+                      onChange={(e) => setScheduleDate(e.target.value)}
+                    />
+                    <Input 
+                      type="time"
+                      className="h-9 text-sm w-full dark:[color-scheme:dark]" 
+                      value={scheduleTime}
+                      onChange={(e) => setScheduleTime(e.target.value)}
+                    />
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col gap-2">

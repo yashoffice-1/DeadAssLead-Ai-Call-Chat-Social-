@@ -17,6 +17,7 @@ import {
   Settings,
 } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export type ViewType = "overview" | "flows" | "inbox" | "calls" | "rules" | "integrations"
 
@@ -90,8 +91,8 @@ export function SidebarNav({
     <button
       onClick={() => handleNavClick(item.id)}
       className={cn(
-        "group relative flex w-full items-center gap-2.5 rounded-lg text-sm font-medium transition-all duration-200",
-        large ? "px-3 py-2.5" : "px-2.5 py-2",
+        "group relative flex items-center rounded-lg text-sm font-medium transition-all duration-200",
+        !showLabel ? "size-9 justify-center" : large ? "w-full gap-2.5 px-3 py-2.5" : "w-full gap-2.5 px-2.5 py-2",
         isActive
           ? "bg-foreground text-background shadow-sm"
           : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -173,11 +174,17 @@ export function SidebarNav({
 
       {/* Footer */}
       <div suppressHydrationWarning className="border-t border-border/60 p-2 space-y-1">
+        <div suppressHydrationWarning className={cn("flex mb-2", collapsed ? "justify-center" : "px-1.5")}>
+          <ThemeToggle />
+        </div>
         {(() => {
           const logoutBtn = (
             <button
               onClick={() => router.push("/")}
-              className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+              className={cn(
+                "flex items-center rounded-lg text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive",
+                collapsed ? "size-9 justify-center mx-auto" : "w-full gap-2.5 px-2.5 py-2"
+              )}
             >
               <LogOut className="size-4 shrink-0" />
               {!collapsed && <span>Log Out</span>}
@@ -254,7 +261,7 @@ export function SidebarNav({
                 {group.items.map((item) => {
                   const isActive = activeView === item.id
                   return (
-                    <div key={item.id}>
+                    <div suppressHydrationWarning key={item.id}>
                       {renderNavButton(item, isActive, true, true)}
                     </div>
                   )
@@ -265,7 +272,10 @@ export function SidebarNav({
         </nav>
 
         {/* Footer */}
-        <div suppressHydrationWarning className="border-t border-border/60 p-3">
+        <div suppressHydrationWarning className="border-t border-border/60 p-3 space-y-2">
+          <div suppressHydrationWarning className="px-1">
+            <ThemeToggle />
+          </div>
           <button
             onClick={() => router.push("/")}
             className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"

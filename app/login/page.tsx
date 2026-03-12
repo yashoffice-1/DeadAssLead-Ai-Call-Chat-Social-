@@ -41,7 +41,7 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                    <h2 className="mb-4 text-4xl font-bold leading-tight tracking-tight text-background">
+                    <h2 className="mb-4 text-5xl font-bold leading-tight tracking-tight text-background">
                         Your Private AI
                         <br />
                         Social &amp; Call Center.

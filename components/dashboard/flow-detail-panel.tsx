@@ -1,5 +1,8 @@
 "use client"
 
+import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
+
 import {
   X,
   Play,
@@ -34,6 +37,11 @@ const toolToggles = [
 ]
 
 export function FlowDetailPanel({ flow, onClose }: FlowDetailPanelProps) {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const isDark = mounted && resolvedTheme === "dark"
+
   return (
     <>
       {/* Mobile backdrop */}
@@ -101,7 +109,7 @@ export function FlowDetailPanel({ flow, onClose }: FlowDetailPanelProps) {
                   <div key={node.id}>
                     <div className="flex items-center gap-3 rounded-lg border border-border bg-accent/50 p-3 transition-colors hover:bg-accent/70">
                       <div className="flex size-8 items-center justify-center rounded-md bg-card">
-                        <node.icon className="size-4" style={{ color: node.color }} />
+                        <node.icon className="size-4" style={{ color: isDark && node.darkColor ? node.darkColor : node.color }} />
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col">
                         <span className="truncate text-xs font-medium text-foreground">{node.label}</span>

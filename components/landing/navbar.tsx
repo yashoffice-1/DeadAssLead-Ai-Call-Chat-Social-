@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Menu, X, Zap } from "lucide-react"
 import Link from "next/link"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const links = [
   { label: "Features", href: "#conversational-setup" },
@@ -82,16 +83,20 @@ export function Navbar() {
             <span className="relative z-10">Get Started</span>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "shimmer 3s ease-in-out infinite", backgroundSize: "200% 100%" }} />
           </Link>
+          <ThemeToggle />
         </nav>
 
         {/* Mobile toggle */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg md:hidden text-foreground transition-colors hover:bg-secondary"
-          aria-label="Toggle navigation"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setOpen(!open)}
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-secondary"
+            aria-label="Toggle navigation"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile nav */}

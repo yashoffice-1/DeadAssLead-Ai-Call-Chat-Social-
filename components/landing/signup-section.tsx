@@ -23,7 +23,7 @@ export function SignupSection() {
     return (
       <section id="signup" className="px-4 py-16 sm:px-6 sm:py-24" suppressHydrationWarning>
         <div className="mx-auto max-w-3xl" suppressHydrationWarning>
-          <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-lg">
+          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-lg">
             <div className="mb-4 flex items-center gap-2 border-b border-border px-4 pt-4 pb-3 sm:mb-6 sm:px-8 sm:pt-6 sm:pb-4">
               <div className="h-3 w-3 rounded-full bg-emerald-400" />
               <span className="text-xs font-medium text-foreground sm:text-sm">DeadAssLead Dashboard</span>
@@ -63,7 +63,7 @@ export function SignupSection() {
 
       <div className="mx-auto max-w-3xl text-center" suppressHydrationWarning>
         <div className="mb-2 flex justify-center" suppressHydrationWarning>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground shadow-sm backdrop-blur-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground shadow-sm backdrop-blur-sm">
             <Rocket className="h-3 w-3" />
             Get Started
           </span>
@@ -86,7 +86,7 @@ export function SignupSection() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Your name"
             required
-            className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground outline-none shadow-sm transition-all placeholder:text-muted-foreground focus:border-foreground/30 focus:shadow-md focus:ring-1 focus:ring-foreground/10 sm:py-3.5"
+            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none shadow-sm transition-all placeholder:text-muted-foreground focus:border-foreground/30 focus:shadow-md focus:ring-1 focus:ring-foreground/10 sm:py-3.5"
           />
           <input
             type="email"
@@ -94,11 +94,12 @@ export function SignupSection() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
             required
-            className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground outline-none shadow-sm transition-all placeholder:text-muted-foreground focus:border-foreground/30 focus:shadow-md focus:ring-1 focus:ring-foreground/10 sm:py-3.5"
+            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none shadow-sm transition-all placeholder:text-muted-foreground focus:border-foreground/30 focus:shadow-md focus:ring-1 focus:ring-foreground/10 sm:py-3.5"
           />
           <button
             type="submit"
             disabled={loading}
+            suppressHydrationWarning
             className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-foreground px-8 py-3 text-sm font-medium text-background transition-all hover:shadow-xl hover:shadow-foreground/10 active:scale-[0.97] disabled:opacity-70 sm:py-3.5"
           >
             {loading ? (
@@ -108,11 +109,11 @@ export function SignupSection() {
               </>
             ) : (
               <>
-                <span className="relative z-10">Make a Great Start</span>
+                <span suppressHydrationWarning className="relative z-10">Make a Great Start</span>
                 <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </>
             )}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "shimmer 3s ease-in-out infinite", backgroundSize: "200% 100%" }} />
+            <div suppressHydrationWarning className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "shimmer 3s ease-in-out infinite", backgroundSize: "200% 100%" }} />
           </button>
         </form>
 

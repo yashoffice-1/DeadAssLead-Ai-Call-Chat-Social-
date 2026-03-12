@@ -7,14 +7,14 @@ export function HeroSection() {
   return (
     <section className="relative flex flex-col items-center overflow-hidden px-4 pt-24 pb-16 text-center sm:px-6 md:pt-40 md:pb-32" suppressHydrationWarning>
       {/* Ambient gradient background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-[350px] w-[500px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-gradient-to-br from-blue-100/60 via-violet-100/40 to-emerald-100/30 blur-3xl sm:h-[450px] sm:w-[700px] md:h-[600px] md:w-[900px]" />
-        <div className="absolute right-0 top-1/4 h-[200px] w-[200px] rounded-full bg-gradient-to-l from-amber-100/40 to-transparent blur-3xl md:h-[300px] md:w-[300px]" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="pointer-events-none absolute inset-0 -z-10" suppressHydrationWarning>
+        <div className="absolute left-1/2 top-0 h-[350px] w-[500px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-gradient-to-br from-blue-100/60 via-violet-100/40 to-emerald-100/30 blur-3xl sm:h-[450px] sm:w-[700px] md:h-[600px] md:w-[900px]" suppressHydrationWarning />
+        <div className="absolute right-0 top-1/4 h-[200px] w-[200px] rounded-full bg-gradient-to-l from-amber-100/40 to-transparent blur-3xl md:h-[300px] md:w-[300px]" suppressHydrationWarning />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" suppressHydrationWarning />
       </div>
 
       {/* Floating grid dots */}
-      <div className="pointer-events-none absolute inset-0 -z-10" style={{
+      <div className="pointer-events-none absolute inset-0 -z-10" suppressHydrationWarning style={{
         backgroundImage: "radial-gradient(circle, oklch(0.85 0 0) 1px, transparent 1px)",
         backgroundSize: "40px 40px",
         opacity: 0.4,
@@ -22,7 +22,7 @@ export function HeroSection() {
 
       {/* Badge */}
       <div
-        className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-white/80 px-3 py-1.5 text-xs text-muted-foreground shadow-sm backdrop-blur-sm sm:mb-6 sm:px-4 sm:py-2 sm:text-sm"
+        className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-background/80 px-3 py-1.5 text-xs text-muted-foreground shadow-sm backdrop-blur-sm sm:mb-6 sm:px-4 sm:py-2 sm:text-sm"
         style={{ animation: "fade-in-up 0.6s ease-out" }}
         suppressHydrationWarning
       >
@@ -55,6 +55,7 @@ export function HeroSection() {
 
       {/* CTA */}
       <div
+        suppressHydrationWarning
         className="mt-8 flex w-full flex-col items-center gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4"
         style={{ animation: "fade-in-up 0.6s ease-out 0.3s both" }}
       >
@@ -68,7 +69,7 @@ export function HeroSection() {
         </Link>
         <a
           href="#conversational-setup"
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-white/60 px-6 py-3.5 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:bg-white hover:shadow-sm sm:w-auto sm:py-4"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background/60 px-6 py-3.5 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:bg-background hover:shadow-sm sm:w-auto sm:py-4"
         >
           See How It Works
         </a>
@@ -76,6 +77,7 @@ export function HeroSection() {
 
       {/* Trust badges */}
       <div
+        suppressHydrationWarning
         className="mt-10 flex flex-col items-center gap-4 sm:mt-16 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-8"
         style={{ animation: "fade-in-up 0.6s ease-out 0.5s both" }}
       >
@@ -84,8 +86,8 @@ export function HeroSection() {
           { icon: Zap, label: "Deploy in 60 seconds" },
           { icon: Globe, label: "Global VPS network" },
         ].map(({ icon: Icon, label }) => (
-          <div key={label} className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary">
+          <div suppressHydrationWarning key={label} className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div suppressHydrationWarning className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary">
               <Icon className="h-4 w-4" />
             </div>
             {label}

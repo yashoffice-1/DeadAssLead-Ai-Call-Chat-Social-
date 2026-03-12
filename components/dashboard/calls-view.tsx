@@ -34,11 +34,12 @@ import {
   Sparkles,
   FileText,
   Tag,
+  ArrowLeft,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import {
   Select,
   SelectContent,
@@ -86,37 +87,37 @@ const toolColors: Record<string, string> = {
 const sentimentConfig = {
   interested: {
     label: "Interested",
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    iconBg: "bg-emerald-100",
+    color: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-50 dark:bg-emerald-500/10",
+    border: "border-emerald-200 dark:border-emerald-500/20",
+    iconBg: "bg-emerald-100 dark:bg-emerald-500/20",
     icon: ThumbsUp,
-    dotColor: "bg-emerald-500",
+    dotColor: "bg-emerald-500 dark:bg-emerald-400",
   },
   neutral: {
     label: "Neutral",
-    color: "text-amber-600",
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    iconBg: "bg-amber-100",
+    color: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-50 dark:bg-amber-500/10",
+    border: "border-amber-200 dark:border-amber-500/20",
+    iconBg: "bg-amber-100 dark:bg-amber-500/20",
     icon: Minus,
-    dotColor: "bg-amber-500",
+    dotColor: "bg-amber-500 dark:bg-amber-400",
   },
   not_interested: {
     label: "Not Interested",
-    color: "text-red-600",
-    bg: "bg-red-50",
-    border: "border-red-200",
-    iconBg: "bg-red-100",
+    color: "text-red-600 dark:text-red-400",
+    bg: "bg-red-50 dark:bg-red-500/10",
+    border: "border-red-200 dark:border-red-500/20",
+    iconBg: "bg-red-100 dark:bg-red-500/20",
     icon: ThumbsDown,
-    dotColor: "bg-red-500",
+    dotColor: "bg-red-500 dark:bg-red-400",
   },
 }
 
 const priorityConfig = {
-  high: { label: "High", color: "text-red-600", bg: "bg-red-50", border: "border-red-200", dot: "bg-red-500" },
-  medium: { label: "Medium", color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200", dot: "bg-amber-500" },
-  low: { label: "Low", color: "text-slate-600", bg: "bg-slate-50", border: "border-slate-200", dot: "bg-slate-400" },
+  high: { label: "High", color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-500/10", border: "border-red-200 dark:border-red-500/20", dot: "bg-red-500 dark:bg-red-400" },
+  medium: { label: "Medium", color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10", border: "border-amber-200 dark:border-amber-500/20", dot: "bg-amber-500 dark:bg-amber-400" },
+  low: { label: "Low", color: "text-slate-600 dark:text-slate-400", bg: "bg-slate-50 dark:bg-slate-500/10", border: "border-slate-200 dark:border-slate-500/20", dot: "bg-slate-400 dark:bg-slate-500" },
 }
 
 const calls: CallRecord[] = [
@@ -241,10 +242,141 @@ function LeadScoreBar({ score }: { score: number }) {
       </div>
       <span className={cn(
         "text-[10px] font-semibold tabular-nums",
-        score >= 80 ? "text-emerald-600" : score >= 50 ? "text-amber-600" : score >= 25 ? "text-orange-600" : "text-red-600"
+        score >= 80 ? "text-emerald-600 dark:text-emerald-400" : score >= 50 ? "text-amber-600 dark:text-amber-400" : score >= 25 ? "text-orange-600 dark:text-orange-400" : "text-red-600 dark:text-red-400"
       )}>
         {score}
       </span>
+    </div>
+  )
+}
+
+function CallDetailView({ call, onBack }: { call: CallRecord; onBack: () => void }) {
+  const sConfig = sentimentConfig[call.sentiment]
+
+  return (
+    <div className="flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200 mt-2">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center border-b border-border pb-4">
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" onClick={onBack} className="h-8 gap-1.5 px-2">
+            <ArrowLeft className="size-3.5" />
+            <span className="hidden sm:inline">Back</span>
+          </Button>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-semibold text-foreground sm:text-lg">{call.contact}</h2>
+              <Badge className={cn("gap-1 border text-[10px] font-medium hidden sm:flex", sConfig.bg, sConfig.color, sConfig.border)}>
+                <span className={cn("size-1.5 rounded-full", sConfig.dotColor)} />
+                {sConfig.label}
+              </Badge>
+            </div>
+            <p className="text-xs text-muted-foreground sm:text-sm">{call.company} • {call.date} at {call.time}</p>
+          </div>
+        </div>
+        <div className="ml-auto flex items-center gap-1.5">
+          {call.tools.map((tool: string) => {
+            const ToolIcon = toolIcons[tool] || Phone
+            const colorClass = toolColors[tool] || "text-muted-foreground bg-accent/50 border-border"
+            return (
+              <div key={tool} className={cn("flex size-7 items-center justify-center rounded-md border", colorClass)} title={tool}>
+                <ToolIcon className="size-3.5" />
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">
+        {/* Left: Contact Info */}
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+          <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <Users className="size-3.5" />
+            Contact Details
+          </h4>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2 text-sm text-foreground">
+              <Mail className="size-4 text-muted-foreground" />
+              <span>{call.email}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-foreground">
+              <Building2 className="size-4 text-muted-foreground" />
+              <span>{call.company}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-foreground">
+              <MapPin className="size-4 text-muted-foreground" />
+              <span>{call.location}</span>
+            </div>
+          </div>
+          {call.tags && call.tags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {call.tags.map((tag: string) => (
+                <Badge key={tag} variant="secondary" className="gap-1 px-2 py-0.5 text-[10px]">
+                  <Tag className="size-2.5" />
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Middle: AI Summary */}
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+          <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <Sparkles className="size-3.5" />
+            AI Summary
+          </h4>
+          {call.aiSummary && (
+            <p className="text-sm leading-relaxed text-foreground">{call.aiSummary}</p>
+          )}
+        </div>
+
+        {/* Right: Next Steps & Actions */}
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+          <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <CalendarClock className="size-3.5" />
+            Next Steps
+          </h4>
+          {call.nextAction && (
+            <div className="flex items-start gap-2.5 rounded-lg border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 p-3.5">
+              <ArrowUpRight className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">{call.nextAction}</p>
+            </div>
+          )}
+          {call.callNotes && (
+            <div className="rounded-lg bg-accent/50 p-3.5">
+              <p className="mb-1 text-xs font-medium text-muted-foreground">Notes</p>
+              <p className="text-sm text-foreground">{call.callNotes}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Bottom: Transcript and Actions */}
+      <div className="flex flex-col gap-4 sm:gap-6">
+        {call.transcript && (
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+            <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <FileText className="size-3.5" />
+              Full Transcript
+            </h4>
+            <div className="rounded-lg border border-dashed border-border bg-accent/30 p-4">
+              <p className="text-sm leading-relaxed text-muted-foreground">{call.transcript}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+          {call.recordingAvailable && (
+            <Button variant="outline" className="w-full sm:w-auto justify-center gap-2 text-xs transition-colors hover:bg-accent hover:text-foreground">
+              <Headphones className="size-4" />
+              Play Recording
+            </Button>
+          )}
+          <Button variant="outline" className="w-full sm:w-auto justify-center gap-2 text-xs transition-colors hover:bg-accent hover:text-foreground border-foreground text-foreground">
+            <ExternalLink className="size-4" />
+            View Full Details
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -253,6 +385,12 @@ export function CallsView() {
   const [sentimentFilter, setSentimentFilter] = useState<string>("all")
   const [typeFilter, setTypeFilter] = useState<string>("all")
   const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  const selectedCall = calls.find((c) => c.id === expandedId)
+
+  if (selectedCall) {
+    return <CallDetailView call={selectedCall} onBack={() => setExpandedId(null)} />
+  }
 
   const filtered = calls
     .filter((c) => sentimentFilter === "all" || c.sentiment === sentimentFilter)
@@ -281,7 +419,7 @@ export function CallsView() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="gap-1.5 border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700">
+          <Badge variant="outline" className="gap-1.5 border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-1 text-emerald-700 dark:text-emerald-400">
             <TrendingUp className="size-3" />
             <span className="text-[10px] font-medium">+12% this week</span>
           </Badge>
@@ -293,10 +431,10 @@ export function CallsView() {
         <Card className="group border transition-all duration-200 hover:border-foreground/20 hover:shadow-sm">
           <CardContent className="py-4">
             <div className="mb-2 flex items-center justify-between">
-              <div className="flex size-7 items-center justify-center rounded-lg bg-blue-50">
-                <Phone className="size-3.5 text-blue-600" />
+              <div className="flex size-7 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-500/10">
+                <Phone className="size-3.5 text-blue-600 dark:text-blue-400" />
               </div>
-              <Badge variant="outline" className="gap-0.5 border-emerald-200 bg-emerald-50 px-1.5 py-0 text-[9px] text-emerald-700">
+              <Badge variant="outline" className="gap-0.5 border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0 text-[9px] text-emerald-700 dark:text-emerald-400">
                 <ArrowUpRight className="size-2.5" />8%
               </Badge>
             </div>
@@ -308,8 +446,8 @@ export function CallsView() {
         <Card className="group border transition-all duration-200 hover:border-foreground/20 hover:shadow-sm">
           <CardContent className="py-4">
             <div className="mb-2 flex items-center justify-between">
-              <div className="flex size-7 items-center justify-center rounded-lg bg-violet-50">
-                <Timer className="size-3.5 text-violet-600" />
+              <div className="flex size-7 items-center justify-center rounded-lg bg-violet-50 dark:bg-violet-500/10">
+                <Timer className="size-3.5 text-violet-600 dark:text-violet-400" />
               </div>
             </div>
             <p className="text-xl font-bold text-foreground">{avgDuration}</p>
@@ -320,14 +458,14 @@ export function CallsView() {
         <Card className="group border transition-all duration-200 hover:border-foreground/20 hover:shadow-sm">
           <CardContent className="py-4">
             <div className="mb-2 flex items-center justify-between">
-              <div className="flex size-7 items-center justify-center rounded-lg bg-emerald-50">
-                <ThumbsUp className="size-3.5 text-emerald-600" />
+              <div className="flex size-7 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-500/10">
+                <ThumbsUp className="size-3.5 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <Badge variant="outline" className="gap-0.5 border-emerald-200 bg-emerald-50 px-1.5 py-0 text-[9px] text-emerald-700">
+              <Badge variant="outline" className="gap-0.5 border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0 text-[9px] text-emerald-700 dark:text-emerald-400">
                 <ArrowUpRight className="size-2.5" />{successRate}%
               </Badge>
             </div>
-            <p className="text-xl font-bold text-emerald-600">{interestedCount}</p>
+            <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{interestedCount}</p>
             <span className="text-[10px] text-muted-foreground">Interested</span>
           </CardContent>
         </Card>
@@ -335,8 +473,8 @@ export function CallsView() {
         <Card className="group border transition-all duration-200 hover:border-foreground/20 hover:shadow-sm">
           <CardContent className="py-4">
             <div className="mb-2 flex items-center justify-between">
-              <div className="flex size-7 items-center justify-center rounded-lg bg-amber-50">
-                <Target className="size-3.5 text-amber-600" />
+              <div className="flex size-7 items-center justify-center rounded-lg bg-amber-50 dark:bg-amber-500/10">
+                <Target className="size-3.5 text-amber-600 dark:text-amber-400" />
               </div>
             </div>
             <p className="text-xl font-bold text-foreground">{avgLeadScore}</p>
@@ -409,7 +547,7 @@ export function CallsView() {
       {/* Call Table */}
       <Card className="overflow-hidden border">
         <ScrollArea className="h-[calc(100vh-24rem)] sm:h-[calc(100vh-28rem)]">
-          <div className="flex flex-col">
+          <div className="flex flex-col md:min-w-[900px]">
             {/* Table Header - Desktop only */}
             <div className="sticky top-0 z-10 hidden items-center gap-4 border-b border-border bg-accent/60 px-5 py-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground backdrop-blur-sm md:flex">
               <span className="w-[200px]">Contact</span>
@@ -432,19 +570,16 @@ export function CallsView() {
                 <div key={call.id}>
                   {/* Mobile Card Layout */}
                   <button
-                    onClick={() => setExpandedId(isExpanded ? null : call.id)}
-                    className={cn(
-                      "flex w-full flex-col gap-2 border-b border-border px-3 py-3 text-left transition-all duration-200 hover:bg-accent/40 md:hidden",
-                      isExpanded && "bg-accent/50 border-b-0"
-                    )}
+                    onClick={() => setExpandedId(call.id)}
+                    className="flex w-full flex-col gap-2 border-b border-border px-3 py-3 text-left transition-all duration-200 hover:bg-accent/40 md:hidden"
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <div className={cn(
                           "flex size-8 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold",
-                          call.sentiment === "interested" ? "bg-emerald-100 text-emerald-700" :
-                          call.sentiment === "not_interested" ? "bg-red-100 text-red-700" :
-                          "bg-amber-100 text-amber-700"
+                          call.sentiment === "interested" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400" :
+                          call.sentiment === "not_interested" ? "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400" :
+                          "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400"
                         )}>
                           {call.contact.split(" ").map((n) => n[0]).join("")}
                         </div>
@@ -460,12 +595,10 @@ export function CallsView() {
                         <span className={cn("size-1.5 rounded-full", sConfig.dotColor)} />
                         {sConfig.label}
                       </Badge>
-                      <div className={cn(
-                        "flex size-5 shrink-0 items-center justify-center rounded transition-transform duration-200",
-                        isExpanded && "rotate-90"
-                      )}>
-                        <ChevronRight className="size-3.5 text-muted-foreground" />
-                      </div>
+                      <span className="shrink-0 flex items-center gap-1 rounded-md border border-input bg-background px-2 py-1 text-[10px] font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground">
+                        View Details
+                        <ChevronRight className="size-3 transition-transform duration-200" />
+                      </span>
                     </div>
                     <div className="flex items-center gap-3 pl-11 text-[10px] text-muted-foreground">
                       <span className="flex items-center gap-1">
@@ -485,20 +618,17 @@ export function CallsView() {
 
                   {/* Desktop Row */}
                   <button
-                    onClick={() => setExpandedId(isExpanded ? null : call.id)}
-                    className={cn(
-                      "hidden w-full items-center gap-4 border-b border-border px-5 py-3.5 text-left transition-all duration-200 hover:bg-accent/40 md:flex",
-                      isExpanded && "bg-accent/50 border-b-0"
-                    )}
+                    onClick={() => setExpandedId(call.id)}
+                    className="hidden w-full items-center gap-4 border-b border-border px-5 py-3.5 text-left transition-all duration-200 hover:bg-accent/40 md:flex"
                   >
                     {/* Contact */}
                     <div className="flex w-[200px] items-center gap-3">
                       <div className="relative">
                         <div className={cn(
                           "flex size-8 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold",
-                          call.sentiment === "interested" ? "bg-emerald-100 text-emerald-700" :
-                          call.sentiment === "not_interested" ? "bg-red-100 text-red-700" :
-                          "bg-amber-100 text-amber-700"
+                          call.sentiment === "interested" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400" :
+                          call.sentiment === "not_interested" ? "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400" :
+                          "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400"
                         )}>
                           {call.contact.split(" ").map((n) => n[0]).join("")}
                         </div>
@@ -516,12 +646,12 @@ export function CallsView() {
                     <div className="flex w-[90px] items-center gap-1.5">
                       <div className={cn(
                         "flex size-5 items-center justify-center rounded",
-                        call.type === "inbound" ? "bg-cyan-50" : "bg-blue-50"
+                        call.type === "inbound" ? "bg-cyan-50 dark:bg-cyan-500/10" : "bg-blue-50 dark:bg-blue-500/10"
                       )}>
                         {call.type === "inbound" ? (
-                          <PhoneIncoming className="size-3 text-cyan-600" />
+                          <PhoneIncoming className="size-3 text-cyan-600 dark:text-cyan-400" />
                         ) : (
-                          <PhoneOutgoing className="size-3 text-blue-600" />
+                          <PhoneOutgoing className="size-3 text-blue-600 dark:text-blue-400" />
                         )}
                       </div>
                       <span className="text-xs capitalize text-muted-foreground">{call.type}</span>
@@ -576,113 +706,17 @@ export function CallsView() {
                     {/* Date + Expand */}
                     <div className="flex flex-1 items-center justify-between">
                       <span className="text-xs text-muted-foreground">{call.date} at {call.time}</span>
-                      <div className={cn(
-                        "flex size-5 items-center justify-center rounded transition-transform duration-200",
-                        isExpanded && "rotate-90"
-                      )}>
-                        <ChevronRight className="size-3.5 text-muted-foreground" />
-                      </div>
+                      <span className="flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground">
+                        View Details
+                        <ChevronRight className="size-3.5 transition-transform duration-200" />
+                      </span>
                     </div>
                   </button>
-
-                  {/* Expanded Details Panel */}
-                  {isExpanded && (
-                    <div className="border-b border-border bg-accent/20">
-                      <div className="grid grid-cols-1 gap-3 px-3 py-4 sm:gap-5 sm:px-5 sm:py-5 lg:grid-cols-3">
-                        {/* Left: Contact Info */}
-                        <div className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4">
-                          <h4 className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                            <Users className="size-3" />
-                            Contact Details
-                          </h4>
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2 text-xs text-foreground">
-                              <Mail className="size-3 text-muted-foreground" />
-                              <span>{call.email}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-foreground">
-                              <Building2 className="size-3 text-muted-foreground" />
-                              <span>{call.company}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-foreground">
-                              <MapPin className="size-3 text-muted-foreground" />
-                              <span>{call.location}</span>
-                            </div>
-                          </div>
-                          {call.tags && call.tags.length > 0 && (
-                            <div className="mt-1 flex flex-wrap gap-1">
-                              {call.tags.map((tag) => (
-                                <Badge
-                                  key={tag}
-                                  variant="outline"
-                                  className="gap-1 border-border bg-accent/50 px-2 py-0 text-[9px] text-muted-foreground"
-                                >
-                                  <Tag className="size-2" />
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Middle: AI Summary */}
-                        <div className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4">
-                          <h4 className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                            <Sparkles className="size-3" />
-                            AI Summary
-                          </h4>
-                          {call.aiSummary && (
-                            <p className="text-xs leading-relaxed text-foreground">{call.aiSummary}</p>
-                          )}
-                          {call.transcript && (
-                            <div className="mt-1 rounded-md border border-dashed border-border bg-accent/30 p-3">
-                              <p className="mb-1 flex items-center gap-1 text-[10px] font-medium text-muted-foreground">
-                                <FileText className="size-2.5" />
-                                Transcript
-                              </p>
-                              <p className="text-[11px] leading-relaxed text-muted-foreground">{call.transcript}</p>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Right: Next Steps & Actions */}
-                        <div className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4">
-                          <h4 className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                            <CalendarClock className="size-3" />
-                            Next Steps
-                          </h4>
-                          {call.nextAction && (
-                            <div className="flex items-start gap-2 rounded-md border border-emerald-200 bg-emerald-50 p-2.5">
-                              <ArrowUpRight className="mt-0.5 size-3 shrink-0 text-emerald-600" />
-                              <p className="text-xs font-medium text-emerald-700">{call.nextAction}</p>
-                            </div>
-                          )}
-                          {call.callNotes && (
-                            <div className="rounded-md bg-accent/50 p-2.5">
-                              <p className="mb-0.5 text-[10px] font-medium text-muted-foreground">Notes</p>
-                              <p className="text-xs text-foreground">{call.callNotes}</p>
-                            </div>
-                          )}
-                          <div className="mt-auto flex gap-2">
-                            {call.recordingAvailable && (
-                              <Button variant="outline" size="sm" className="h-7 gap-1.5 text-[10px]">
-                                <Headphones className="size-3" />
-                                Play Recording
-                              </Button>
-                            )}
-                            <Button variant="outline" size="sm" className="h-7 gap-1.5 text-[10px]">
-                              <ExternalLink className="size-3" />
-                              View Full Details
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )
             })}
           </div>
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </Card>
     </div>

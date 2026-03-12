@@ -18,7 +18,7 @@ const plans = [
     ],
     cta: "Get Started",
     highlighted: false,
-    gradient: "from-slate-50 to-gray-50",
+    gradient: "from-slate-50 to-gray-50 dark:from-slate-900/40 dark:to-gray-900/40",
   },
   {
     name: "Pro",
@@ -35,7 +35,7 @@ const plans = [
     ],
     cta: "Go Pro",
     highlighted: true,
-    gradient: "from-blue-50 via-indigo-50 to-violet-50",
+    gradient: "from-blue-50 via-indigo-50 to-violet-50 dark:from-blue-950/40 dark:via-indigo-950/40 dark:to-violet-950/40",
   },
   {
     name: "Business",
@@ -53,7 +53,7 @@ const plans = [
     ],
     cta: "Contact Sales",
     highlighted: false,
-    gradient: "from-emerald-50 to-cyan-50",
+    gradient: "from-emerald-50 to-cyan-50 dark:from-emerald-950/40 dark:to-cyan-950/40",
   },
 ]
 
@@ -65,7 +65,7 @@ export function PricingSection() {
 
       <div className="mx-auto max-w-5xl" suppressHydrationWarning>
         <div className="mb-2 flex justify-center" suppressHydrationWarning>
-          <span className="inline-flex items-center rounded-full border border-border bg-white/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground shadow-sm backdrop-blur-sm">
+          <span className="inline-flex items-center rounded-full border border-border bg-background/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground shadow-sm backdrop-blur-sm">
             Pricing
           </span>
         </div>
@@ -78,14 +78,15 @@ export function PricingSection() {
         </p>
 
         {/* Mobile: stack on top of each other, with highlighted card first for emphasis */}
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+        <div suppressHydrationWarning className="grid gap-4 sm:gap-6 md:grid-cols-3">
           {plans.map((plan) => (
             <div
+              suppressHydrationWarning
               key={plan.name}
               className={`group relative flex flex-col rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8 ${
                 plan.highlighted
                   ? "border-foreground/20 bg-gradient-to-b " + plan.gradient + " shadow-lg order-first md:order-none mt-4 md:mt-0"
-                  : "border-border bg-white hover:border-border/60 overflow-hidden"
+                  : "border-border bg-card hover:border-border/60 overflow-hidden"
               }`}
             >
               {/* Glow effect on highlighted */}
@@ -135,16 +136,17 @@ export function PricingSection() {
 
               <Link
                 href="/signup"
+                suppressHydrationWarning
                 className={`relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl py-3 text-sm font-medium transition-all active:scale-[0.97] sm:py-3.5 ${
                   plan.highlighted
                     ? "bg-foreground text-background hover:shadow-lg hover:shadow-foreground/10"
-                    : "border border-border bg-white text-foreground hover:bg-secondary hover:shadow-sm"
+                    : "border border-border bg-card text-foreground hover:bg-secondary hover:shadow-sm"
                 }`}
               >
                 {plan.cta}
                 <ArrowRight className="h-3.5 w-3.5" />
                 {plan.highlighted && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "shimmer 3s ease-in-out infinite", backgroundSize: "200% 100%" }} />
+                  <div suppressHydrationWarning className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "shimmer 3s ease-in-out infinite", backgroundSize: "200% 100%" }} />
                 )}
               </Link>
             </div>

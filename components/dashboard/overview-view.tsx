@@ -172,7 +172,7 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
       <div suppressHydrationWarning className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         {/* Active Automations - 3 cols */}
         <div suppressHydrationWarning className="flex flex-col gap-4 lg:col-span-3">
-          <div className="flex items-center justify-between">
+          <div suppressHydrationWarning className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground">Active Automations</h2>
             <Button
               variant="ghost"
@@ -185,7 +185,7 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
             </Button>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div suppressHydrationWarning className="flex flex-col gap-3">
             {activeFlows.map((flow) => (
               <Card
                 key={flow.id}
@@ -200,13 +200,13 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                 onClick={() => onSelectFlowById?.(flow.id)}
               >
                 <CardContent className="py-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary">
+                  <div suppressHydrationWarning className="flex items-center gap-4">
+                    <div suppressHydrationWarning className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary">
                       <GitBranch className="size-4 text-foreground" />
                     </div>
 
-                    <div className="flex flex-1 flex-col gap-1">
-                      <div className="flex items-center gap-2">
+                    <div suppressHydrationWarning className="flex flex-1 flex-col gap-1">
+                      <div suppressHydrationWarning className="flex items-center gap-2">
                         <span className="text-sm font-medium text-foreground">
                           {flow.name}
                         </span>
@@ -222,7 +222,7 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                           {flow.status}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <div suppressHydrationWarning className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <span>{flow.trigger}</span>
                         <ArrowRight className="size-2.5" />
                         <span>{flow.action}</span>
@@ -231,11 +231,12 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                       </div>
                     </div>
 
-                    <div className="hidden items-center gap-1 md:flex">
+                    <div suppressHydrationWarning className="hidden items-center gap-1 md:flex">
                       {flow.tools.map((tool) => {
                         const Icon = toolIcons[tool] || Bot
                         return (
                           <div
+                            suppressHydrationWarning
                             key={tool}
                             className="flex size-7 items-center justify-center rounded-md border border-border bg-secondary"
                             title={tool}
@@ -246,7 +247,7 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                       })}
                     </div>
 
-                    <div className="hidden shrink-0 flex-col items-end gap-0.5 sm:flex">
+                    <div suppressHydrationWarning className="hidden shrink-0 flex-col items-end gap-0.5 sm:flex">
                       <span className="text-xs font-medium text-foreground">
                         {flow.triggerCount} triggers
                       </span>
@@ -273,18 +274,19 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[420px] pr-3">
-              <div className="flex flex-col gap-2">
+              <div suppressHydrationWarning className="flex flex-col gap-2">
                 {brainEvents.map((item, i) => {
                   const Icon = eventIcons[item.type] || Bot
                   return (
                     <div
+                      suppressHydrationWarning
                       key={i}
                       className="flex items-start gap-3 rounded-lg border border-border p-3 transition-colors hover:bg-secondary/50"
                     >
-                      <div className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-secondary">
+                      <div suppressHydrationWarning className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-secondary">
                         <Icon className="size-3.5 text-muted-foreground" />
                       </div>
-                      <div className="flex flex-1 flex-col gap-0.5">
+                      <div suppressHydrationWarning className="flex flex-1 flex-col gap-0.5">
                         <span className="text-xs font-medium text-foreground">
                           {item.event}
                         </span>
@@ -308,12 +310,12 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
 }
 
 const accentColors: Record<string, { icon: string; bg: string; text: string }> = {
-  violet: { icon: "text-violet-600", bg: "bg-violet-50", text: "text-violet-600" },
-  blue: { icon: "text-blue-600", bg: "bg-blue-50", text: "text-blue-600" },
-  emerald: { icon: "text-emerald-600", bg: "bg-emerald-50", text: "text-emerald-600" },
-  cyan: { icon: "text-cyan-600", bg: "bg-cyan-50", text: "text-cyan-600" },
-  amber: { icon: "text-amber-600", bg: "bg-amber-50", text: "text-amber-600" },
-  pink: { icon: "text-pink-600", bg: "bg-pink-50", text: "text-pink-600" },
+  violet: { icon: "text-violet-600 dark:text-violet-400", bg: "bg-violet-50 dark:bg-violet-500/10", text: "text-violet-600 dark:text-violet-400" },
+  blue: { icon: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-500/10", text: "text-blue-600 dark:text-blue-400" },
+  emerald: { icon: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400" },
+  cyan: { icon: "text-cyan-600 dark:text-cyan-400", bg: "bg-cyan-50 dark:bg-cyan-500/10", text: "text-cyan-600 dark:text-cyan-400" },
+  amber: { icon: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10", text: "text-amber-600 dark:text-amber-400" },
+  pink: { icon: "text-pink-600 dark:text-pink-400", bg: "bg-pink-50 dark:bg-pink-500/10", text: "text-pink-600 dark:text-pink-400" },
 }
 
 function StatCard({
@@ -338,19 +340,19 @@ function StatCard({
       style={{ animationDelay: `${delay}ms` }}
     >
       <CardContent className="py-4">
-        <div className="flex items-start justify-between">
+        <div suppressHydrationWarning className="flex items-start justify-between">
           {Icon && (
-            <div className={cn("flex size-8 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-105", colors.bg)}>
+            <div suppressHydrationWarning className={cn("flex size-8 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-105", colors.bg)}>
               <Icon className={cn("size-4", colors.icon)} />
             </div>
           )}
           {change && (
-            <span className="flex items-center gap-0.5 rounded-full bg-success/10 px-1.5 py-0.5 text-[9px] font-semibold text-success">
+            <span className="flex items-center gap-0.5 rounded-full bg-success/20 dark:bg-success/30 px-1.5 py-0.5 text-[9px] font-semibold text-success dark:text-success-foreground">
               ↑{change}
             </span>
           )}
         </div>
-        <div className="mt-2 flex flex-col gap-0.5">
+        <div suppressHydrationWarning className="mt-2 flex flex-col gap-0.5">
           <span className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{value}</span>
           <span className="text-[10px] font-medium text-muted-foreground sm:text-xs">{label}</span>
         </div>

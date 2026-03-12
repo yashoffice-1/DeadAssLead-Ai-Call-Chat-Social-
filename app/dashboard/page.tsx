@@ -280,7 +280,7 @@ export default function DashboardPage() {
               <button className="flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent">
                 <Bell className="size-4" />
               </button>
-              <div className="flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2 py-0.5">
+              <div suppressHydrationWarning className="flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2 py-0.5">
                 <span className="relative flex size-1.5">
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />
                   <span className="relative inline-flex size-1.5 rounded-full bg-success" />
@@ -294,7 +294,7 @@ export default function DashboardPage() {
           <header suppressHydrationWarning className="hidden shrink-0 flex-col border-b border-border/60 bg-card/80 backdrop-blur-sm md:flex">
             <div suppressHydrationWarning className="flex items-center justify-between px-6 py-3">
               <div suppressHydrationWarning className="flex items-center gap-3">
-                <div className="flex size-8 items-center justify-center rounded-lg bg-accent/80">
+                <div suppressHydrationWarning className="flex size-8 items-center justify-center rounded-lg bg-accent/80">
                   <CurrentViewIcon className="size-4 text-foreground" />
                 </div>
                 <div>
@@ -306,15 +306,15 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <button className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+              <div suppressHydrationWarning className="flex items-center gap-3">
+                <button suppressHydrationWarning className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
                   <Search className="size-4" />
                 </button>
-                <button className="relative flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                <button suppressHydrationWarning className="relative flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
                   <Bell className="size-4" />
                   <span className="absolute -right-0.5 -top-0.5 flex size-3.5 items-center justify-center rounded-full bg-destructive text-[8px] font-bold text-white">3</span>
                 </button>
-                <div className="flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2.5 py-1">
+                <div suppressHydrationWarning className="flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2.5 py-1">
                   <span className="relative flex size-1.5">
                     <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />
                     <span className="relative inline-flex size-1.5 rounded-full bg-success" />
@@ -336,7 +336,7 @@ export default function DashboardPage() {
           {/* Mobile Page Title + KPI Row */}
           <div suppressHydrationWarning className="flex flex-col border-b border-border/60 bg-card/50 md:hidden">
             <div suppressHydrationWarning className="flex items-center gap-2.5 px-3 py-2.5">
-              <div className="flex size-7 items-center justify-center rounded-lg bg-accent/80">
+              <div suppressHydrationWarning className="flex size-7 items-center justify-center rounded-lg bg-accent/80">
                 <CurrentViewIcon className="size-3.5 text-foreground" />
               </div>
               <div>
@@ -429,7 +429,7 @@ function KpiPill({
   positive?: boolean
 }) {
   return (
-    <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+    <div suppressHydrationWarning className="flex shrink-0 items-center gap-1.5 sm:gap-2">
       <Icon className="size-3 text-muted-foreground sm:size-3.5" />
       <span className="whitespace-nowrap text-[10px] text-muted-foreground sm:text-xs">{label}</span>
       <span className="whitespace-nowrap text-[10px] font-semibold text-foreground sm:text-xs">{value}</span>
@@ -456,9 +456,10 @@ function QuickNavGrid({ onNavigate }: { onNavigate: (view: ViewType) => void }) 
   ]
 
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 sm:gap-3">
+    <div suppressHydrationWarning className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 sm:gap-3">
       {cards.map((card, idx) => (
         <button
+          suppressHydrationWarning
           key={card.view}
           onClick={() => onNavigate(card.view)}
           className={cn(
@@ -468,7 +469,7 @@ function QuickNavGrid({ onNavigate }: { onNavigate: (view: ViewType) => void }) 
           )}
           style={{ animationDelay: `${idx * 60}ms` }}
         >
-          <div className="flex items-center justify-between">
+          <div suppressHydrationWarning className="flex items-center justify-between">
             <card.icon className="size-5 text-foreground/70 transition-transform duration-300 group-hover:scale-110 sm:size-6" />
             {card.count && (
               <span className="flex size-5 items-center justify-center rounded-full bg-foreground/10 text-[10px] font-bold text-foreground sm:size-6 sm:text-xs">
@@ -476,7 +477,7 @@ function QuickNavGrid({ onNavigate }: { onNavigate: (view: ViewType) => void }) 
               </span>
             )}
           </div>
-          <div>
+          <div suppressHydrationWarning>
             <span className="text-xs font-semibold text-foreground sm:text-sm">{card.label}</span>
             <p className="text-[10px] text-muted-foreground sm:text-xs">{card.desc}</p>
           </div>
