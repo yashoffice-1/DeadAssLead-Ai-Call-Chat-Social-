@@ -393,7 +393,7 @@ function CallDetailView({ call, onBack }: { call: CallRecord; onBack: () => void
                  </Button>
               </div>
             </div>
-            <ScrollArea className="flex-1 p-4">
+            <ScrollArea className="flex-1 min-h-0 p-4">
               <div className="flex flex-col gap-6 pb-6 pr-4">
                 {(call.messages || []).map((msg, i) => (
                   <div key={i} className={cn("flex w-full", msg.speaker === "ai" ? "justify-start" : "justify-end")}>

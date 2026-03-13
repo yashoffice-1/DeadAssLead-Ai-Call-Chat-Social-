@@ -2,22 +2,21 @@
 
 function PulseIcon({ children, label }: { children: React.ReactNode; label: string }) {
   return (
-    <div className="group flex flex-col items-center gap-2 sm:gap-3">
-      <div className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:border-emerald-300/60 sm:h-16 sm:w-16 sm:rounded-2xl">
+    <div className="group flex flex-col items-center gap-3">
+      <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-emerald-500/10 group-hover:border-emerald-500/50">
         <div
-          className="absolute inset-0 rounded-xl border-2 border-emerald-400/30 sm:rounded-2xl"
-          style={{ animation: "pulse-ring 2.5s ease-out infinite" }}
+          className="absolute inset-0 rounded-2xl border-2 border-emerald-400/0 transition-all duration-300 group-hover:border-emerald-400/30 group-hover:animate-[pulse-ring_2.5s_ease-out_infinite]"
         />
         {children}
       </div>
-      <span className="text-[10px] font-medium text-muted-foreground transition-colors group-hover:text-foreground sm:text-xs">{label}</span>
+      <span className="text-xs font-semibold text-muted-foreground transition-colors group-hover:text-foreground">{label}</span>
     </div>
   )
 }
 
 function InstagramIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 sm:h-7 sm:w-7">
+    <svg viewBox="0 0 24 24" className="h-8 w-8 transition-transform duration-300 group-hover:scale-110">
       <defs>
         <radialGradient id="ig-grad" r="1.375" cy="0.915" cx="0.271">
           <stop stopColor="#fd5" offset="0" />
@@ -35,7 +34,7 @@ function InstagramIcon() {
 
 function TikTokIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 sm:h-7 sm:w-7" fill="none">
+    <svg viewBox="0 0 24 24" className="h-8 w-8 transition-transform duration-300 group-hover:scale-110" fill="none">
       <path d="M12.525 2.15v14.482a2.91 2.91 0 1 1-2.91-2.91c.29-.001.577.04.852.12v-3.411a6.38 6.38 0 0 0-4.045 5.952c0 3.52 2.855 6.375 6.375 6.375 3.52 0 6.375-2.855 6.375-6.375A2.3 2.3 0 0 1 12.525 2.15Z" fill="#000" className="dark:fill-white" />
       <path d="M12.525 2.15v5.827c1.472-.325 3.018-.152 4.41.488.756.286 1.442.71 2.016 1.25V5.51a8.4 8.4 0 0 0-6.426-3.36Z" fill="#00F2FE" />
       <path d="M12.525 7.977c1.472-.325 3.018-.152 4.41.488V12c-1.282-.128-2.583-.027-3.834.3v-4.323Z" fill="#FE2C55" />
@@ -45,7 +44,7 @@ function TikTokIcon() {
 
 function FacebookIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 sm:h-7 sm:w-7">
+    <svg viewBox="0 0 24 24" className="h-8 w-8 transition-transform duration-300 group-hover:scale-110">
       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877f2" />
       <path d="M16.671 15.542l.532-3.469h-3.328v-2.25c0-.949.465-1.874 1.956-1.874h1.514V5.003c0 0-1.374-.235-2.686-.235-2.741 0-4.533 1.662-4.533 4.669v2.643H7.078v3.469h3.047v8.385a12.09 12.09 0 003.75 0v-8.385h2.796z" fill="#fff" />
     </svg>
@@ -53,84 +52,92 @@ function FacebookIcon() {
 }
 
 function VapiIcon() {
-  return <span className="text-xs font-bold text-foreground tracking-tight sm:text-sm">Vapi</span>
+  return <span className="text-sm font-bold text-foreground tracking-tight transition-transform duration-300 group-hover:scale-110">Vapi</span>
 }
 
 function RetellIcon() {
-  return <span className="text-xs font-bold text-foreground tracking-tight sm:text-sm">Retell</span>
+  return <span className="text-sm font-bold text-foreground tracking-tight transition-transform duration-300 group-hover:scale-110">Retell</span>
 }
 
 function ElevenLabsIcon() {
-  return <span className="text-[8px] font-bold text-foreground leading-tight text-center sm:text-[10px]">Eleven<br />Labs</span>
+  return <span className="text-[11px] font-bold text-foreground leading-none text-center transition-transform duration-300 group-hover:scale-110">Eleven<br />Labs</span>
 }
 
 function DeepgramIcon() {
-  return <span className="text-[8px] font-bold text-foreground leading-tight text-center sm:text-[10px]">Deep<br />gram</span>
+  return <span className="text-[11px] font-bold text-foreground leading-none text-center transition-transform duration-300 group-hover:scale-110">Deep<br />gram</span>
 }
 
 function PlivoIcon() {
-  return <span className="text-xs font-bold text-foreground tracking-tight sm:text-sm">Plivo</span>
+  return <span className="text-sm font-bold text-foreground tracking-tight transition-transform duration-300 group-hover:scale-110">Plivo</span>
 }
 
 export function ConnectionHub() {
   return (
-    <section className="relative px-4 py-16 overflow-hidden sm:px-6 sm:py-24" suppressHydrationWarning>
-      {/* Subtle background */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-secondary/30 via-transparent to-secondary/30" />
+    <section className="relative overflow-hidden py-24 sm:py-32" suppressHydrationWarning>
+      {/* Premium Gradient Background */}
+      <div className="absolute inset-0 -z-10 bg-muted/20" />
+      <div className="absolute inset-y-0 left-1/2 -z-10 w-[200%] -translate-x-1/2 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.1),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.15),rgba(0,0,0,0))]" />
 
-      <div className="mx-auto max-w-5xl" suppressHydrationWarning>
-        <div className="mb-2 inline-flex items-center rounded-full border border-border bg-background/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground shadow-sm backdrop-blur-sm" suppressHydrationWarning>
-          Connection Hub
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl lg:text-center animate-[fade-in-up_0.6s_ease-out_both]">
+          <div className="mb-4 inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+            Connection Hub
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl text-balance">
+            Connect everything in one place.
+          </h2>
+          <p className="mt-6 text-lg leading-8 text-muted-foreground mx-auto max-w-xl">
+            Integrate all your social platforms and voice tools seamlessly. One dashboard, every channel instantly reacting to dead leads.
+          </p>
         </div>
-        <h2 className="mb-3 text-2xl font-bold tracking-tight text-foreground sm:mb-4 sm:text-3xl md:text-4xl">
-          Connect everything in one place.
-        </h2>
-        <p className="mb-8 max-w-xl text-sm text-muted-foreground leading-relaxed sm:mb-12 sm:text-base">
-          Integrate all your social platforms and voice tools seamlessly. One dashboard, every channel.
-        </p>
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+
+        <div className="mx-auto mt-16 flex max-w-5xl flex-col md:flex-row items-stretch justify-center gap-6 lg:gap-8">
           {/* Social Platforms Card */}
-          <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:shadow-lg hover:border-border/60 sm:p-8">
-            <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-gradient-to-br from-violet-100/50 to-pink-100/30 dark:from-violet-900/30 dark:to-pink-900/10 blur-2xl transition-all duration-500 group-hover:scale-150" />
-            <h3 className="relative mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground sm:mb-6">
-              Social Platforms
-            </h3>
-            <div className="relative flex items-center justify-center gap-5 sm:gap-8">
-              <PulseIcon label="Instagram">
-                <InstagramIcon />
-              </PulseIcon>
-              <PulseIcon label="TikTok">
-                <TikTokIcon />
-              </PulseIcon>
-              <PulseIcon label="Facebook">
-                <FacebookIcon />
-              </PulseIcon>
+          <div className="group relative flex w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-border bg-card/50 px-8 py-12 shadow-xl backdrop-blur-sm transition-all duration-300 hover:shadow-2xl hover:border-emerald-500/30 dark:hover:bg-card/80 animate-[card-enter_0.6s_ease-out_0.2s_both] md:w-1/2">
+            <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl transition-all duration-500 group-hover:bg-emerald-500/20 group-hover:scale-150" />
+            <div className="relative z-10 flex flex-col items-center w-full">
+              <h3 className="mb-8 text-sm font-bold uppercase tracking-widest text-foreground text-center">
+                Social Platforms
+              </h3>
+              <div className="flex w-full items-center justify-center gap-6 sm:gap-10">
+                <PulseIcon label="Instagram">
+                  <InstagramIcon />
+                </PulseIcon>
+                <PulseIcon label="TikTok">
+                  <TikTokIcon />
+                </PulseIcon>
+                <PulseIcon label="Facebook">
+                  <FacebookIcon />
+                </PulseIcon>
+              </div>
             </div>
           </div>
 
           {/* Voice Suite Card */}
-          <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:shadow-lg hover:border-border/60 sm:p-8">
-            <div className="absolute -left-12 -bottom-12 h-32 w-32 rounded-full bg-gradient-to-br from-emerald-100/50 to-cyan-100/30 dark:from-emerald-900/30 dark:to-cyan-900/10 blur-2xl transition-all duration-500 group-hover:scale-150" />
-            <h3 className="relative mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground sm:mb-6">
-              Voice Suite
-            </h3>
-            <div className="relative grid grid-cols-3 gap-4 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-6">
-              <PulseIcon label="Vapi">
-                <VapiIcon />
-              </PulseIcon>
-              <PulseIcon label="Retell">
-                <RetellIcon />
-              </PulseIcon>
-              <PulseIcon label="ElevenLabs">
-                <ElevenLabsIcon />
-              </PulseIcon>
-              <div className="col-span-3 flex justify-center gap-4 sm:contents">
-                <PulseIcon label="Deepgram">
-                  <DeepgramIcon />
+          <div className="group relative flex w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-border bg-card/50 px-8 py-12 shadow-xl backdrop-blur-sm transition-all duration-300 hover:shadow-2xl hover:border-emerald-500/30 dark:hover:bg-card/80 animate-[card-enter_0.6s_ease-out_0.3s_both] md:w-1/2">
+            <div className="absolute -left-12 -bottom-12 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl transition-all duration-500 group-hover:bg-emerald-500/20 group-hover:scale-150" />
+            <div className="relative z-10 flex flex-col items-center w-full">
+              <h3 className="mb-8 text-sm font-bold uppercase tracking-widest text-foreground text-center">
+                Voice Suite
+              </h3>
+              <div className="grid grid-cols-3 gap-6 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-8 w-full max-w-sm">
+                <PulseIcon label="Vapi">
+                  <VapiIcon />
                 </PulseIcon>
-                <PulseIcon label="Plivo">
-                  <PlivoIcon />
+                <PulseIcon label="Retell">
+                  <RetellIcon />
                 </PulseIcon>
+                <PulseIcon label="ElevenLabs">
+                  <ElevenLabsIcon />
+                </PulseIcon>
+                <div className="col-span-3 flex justify-center gap-6 sm:contents">
+                  <PulseIcon label="Deepgram">
+                    <DeepgramIcon />
+                  </PulseIcon>
+                  <PulseIcon label="Plivo">
+                    <PlivoIcon />
+                  </PulseIcon>
+                </div>
               </div>
             </div>
           </div>

@@ -195,7 +195,7 @@ export function SolutionSection() {
                 </div>
               </div>
             </div>
-            <div className="p-6 relative z-10 h-[calc(100%-80px)] overflow-hidden">
+            <div className="p-6 relative z-10 h-[calc(100%-72px)] overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-emerald-500/20">
                {features[activeFeature].content}
             </div>
           </div>

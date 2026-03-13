@@ -63,7 +63,7 @@ export function HeroSection() {
           href="#pricing"
           className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-foreground px-6 py-3.5 text-base font-medium text-background transition-all hover:shadow-2xl hover:shadow-foreground/10 active:scale-[0.97] sm:w-auto sm:px-8 sm:py-4"
         >
-          <span className="relative z-10">Book a Demo</span>
+          <span className="relative z-10">Get Started</span>
           <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "shimmer 3s ease-in-out infinite", backgroundSize: "200% 100%" }} />
         </a>

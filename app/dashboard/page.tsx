@@ -197,12 +197,6 @@ export default function DashboardPage() {
   const [credModalOpen, setCredModalOpen] = useState(false)
   const [credService, setCredService] = useState<string>("")
   
-  // Hydration mismatch prevention for deeply nested extension-injected attributes
-  const [isMounted, setIsMounted] = useState(false)
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
   const openCredentialModal = (serviceId: string) => {
     setCredService(serviceId)
     setCredModalOpen(true)
@@ -254,12 +248,8 @@ export default function DashboardPage() {
   const CurrentViewIcon = viewIcons[activeView]
   const currentCredConfig = credentialConfigs[credService]
 
-  if (!isMounted) {
-    return null // Provide a clean rendering slate, entirely bypassing extension hydration mismatches
-  }
-
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-background" suppressHydrationWarning>
       <SidebarNav
         activeView={activeView}
         onViewChange={changeView}

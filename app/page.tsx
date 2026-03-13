@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/landing/hero-section"
 import { ConnectionHub } from "@/components/landing/connection-hub"
 import { ProblemSection } from "@/components/landing/problem-section"
 import { SolutionSection } from "@/components/landing/solution-section"
+import { FlowBuilderSection } from "@/components/landing/flow-builder-section"
 import { HowItWorksSection } from "@/components/landing/how-it-works-section"
 import { FeaturesSection } from "@/components/landing/features-section"
 import { ProductDemoSection } from "@/components/landing/product-demo-section"
@@ -21,6 +22,7 @@ export default function Home() {
       <ConnectionHub />
       <ProblemSection />
       <SolutionSection />
+      <FlowBuilderSection />
       <HowItWorksSection />
       <FeaturesSection />
       <ProductDemoSection />
