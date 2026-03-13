@@ -158,9 +158,9 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
   const [hoveredFlow, setHoveredFlow] = useState<string | null>(null)
 
   return (
-    <div suppressHydrationWarning className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       {/* Stats Row */}
-      <div suppressHydrationWarning className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
         <StatCard label="Active Flows" value="4" icon={GitBranch} change="+1" accent="violet" delay={0} />
         <StatCard label="Total Leads" value="1,245" icon={Zap} change="+12%" accent="blue" delay={60} />
         <StatCard label="Calls (24h)" value="34" icon={Phone} change="+8%" accent="emerald" delay={120} />
@@ -169,10 +169,10 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
         <StatCard label="Post Rules" value="3" icon={Activity} accent="pink" delay={300} />
       </div>
 
-      <div suppressHydrationWarning className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         {/* Active Automations - 3 cols */}
-        <div suppressHydrationWarning className="flex flex-col gap-4 lg:col-span-3">
-          <div suppressHydrationWarning className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 lg:col-span-3">
+          <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground">Active Automations</h2>
             <Button
               variant="ghost"
@@ -185,7 +185,7 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
             </Button>
           </div>
 
-          <div suppressHydrationWarning className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
             {activeFlows.map((flow) => (
               <Card
                 key={flow.id}
@@ -200,13 +200,13 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                 onClick={() => onSelectFlowById?.(flow.id)}
               >
                 <CardContent className="py-4">
-                  <div suppressHydrationWarning className="flex items-center gap-4">
-                    <div suppressHydrationWarning className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary">
+                  <div className="flex items-center gap-4">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary">
                       <GitBranch className="size-4 text-foreground" />
                     </div>
 
-                    <div suppressHydrationWarning className="flex flex-1 flex-col gap-1">
-                      <div suppressHydrationWarning className="flex items-center gap-2">
+                    <div className="flex flex-1 flex-col gap-1">
+                      <div className="flex items-center gap-2">
                         <span className="text-sm font-medium text-foreground">
                           {flow.name}
                         </span>
@@ -222,7 +222,7 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                           {flow.status}
                         </Badge>
                       </div>
-                      <div suppressHydrationWarning className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <span>{flow.trigger}</span>
                         <ArrowRight className="size-2.5" />
                         <span>{flow.action}</span>
@@ -231,12 +231,12 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                       </div>
                     </div>
 
-                    <div suppressHydrationWarning className="hidden items-center gap-1 md:flex">
+                    <div className="hidden items-center gap-1 md:flex">
                       {flow.tools.map((tool) => {
                         const Icon = toolIcons[tool] || Bot
                         return (
                           <div
-                            suppressHydrationWarning
+                           
                             key={tool}
                             className="flex size-7 items-center justify-center rounded-md border border-border bg-secondary"
                             title={tool}
@@ -247,7 +247,7 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
                       })}
                     </div>
 
-                    <div suppressHydrationWarning className="hidden shrink-0 flex-col items-end gap-0.5 sm:flex">
+                    <div className="hidden shrink-0 flex-col items-end gap-0.5 sm:flex">
                       <span className="text-xs font-medium text-foreground">
                         {flow.triggerCount} triggers
                       </span>
@@ -274,19 +274,19 @@ export function OverviewView({ onSelectFlowById, onNavigateToFlows }: OverviewVi
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[420px] pr-3">
-              <div suppressHydrationWarning className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2">
                 {brainEvents.map((item, i) => {
                   const Icon = eventIcons[item.type] || Bot
                   return (
                     <div
-                      suppressHydrationWarning
+                     
                       key={i}
                       className="flex items-start gap-3 rounded-lg border border-border p-3 transition-colors hover:bg-secondary/50"
                     >
-                      <div suppressHydrationWarning className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-secondary">
+                      <div className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-secondary">
                         <Icon className="size-3.5 text-muted-foreground" />
                       </div>
-                      <div suppressHydrationWarning className="flex flex-1 flex-col gap-0.5">
+                      <div className="flex flex-1 flex-col gap-0.5">
                         <span className="text-xs font-medium text-foreground">
                           {item.event}
                         </span>
@@ -340,9 +340,9 @@ function StatCard({
       style={{ animationDelay: `${delay}ms` }}
     >
       <CardContent className="py-4">
-        <div suppressHydrationWarning className="flex items-start justify-between">
+        <div className="flex items-start justify-between">
           {Icon && (
-            <div suppressHydrationWarning className={cn("flex size-8 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-105", colors.bg)}>
+            <div className={cn("flex size-8 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-105", colors.bg)}>
               <Icon className={cn("size-4", colors.icon)} />
             </div>
           )}
@@ -352,7 +352,7 @@ function StatCard({
             </span>
           )}
         </div>
-        <div suppressHydrationWarning className="mt-2 flex flex-col gap-0.5">
+        <div className="mt-2 flex flex-col gap-0.5">
           <span className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{value}</span>
           <span className="text-[10px] font-medium text-muted-foreground sm:text-xs">{label}</span>
         </div>

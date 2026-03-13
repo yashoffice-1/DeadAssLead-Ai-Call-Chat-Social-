@@ -1,11 +1,16 @@
 import { Navbar } from "@/components/landing/navbar"
 import { HeroSection } from "@/components/landing/hero-section"
 import { ConnectionHub } from "@/components/landing/connection-hub"
-import { ConversationalSetup } from "@/components/landing/conversational-setup"
-import { CommandCenter } from "@/components/landing/command-center"
-import { RuleEngine } from "@/components/landing/rule-engine"
-import { PricingSection } from "@/components/landing/pricing-section"
-import { SignupSection } from "@/components/landing/signup-section"
+import { ProblemSection } from "@/components/landing/problem-section"
+import { SolutionSection } from "@/components/landing/solution-section"
+import { HowItWorksSection } from "@/components/landing/how-it-works-section"
+import { FeaturesSection } from "@/components/landing/features-section"
+import { ProductDemoSection } from "@/components/landing/product-demo-section"
+import { IndustriesSection } from "@/components/landing/industries-section"
+import { ResultsSection } from "@/components/landing/results-section"
+import { TestimonialsSection } from "@/components/landing/testimonials-section"
+import { FaqSection } from "@/components/landing/faq-section"
+import { FinalCtaSection } from "@/components/landing/final-cta-section"
 import { Footer } from "@/components/landing/footer"
 
 export default function Home() {
@@ -14,13 +19,16 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <ConnectionHub />
-      <ConversationalSetup />
-      <CommandCenter />
-      <RuleEngine />
-      <section id="pricing">
-        <PricingSection />
-      </section>
-      <SignupSection />
+      <ProblemSection />
+      <SolutionSection />
+      <HowItWorksSection />
+      <FeaturesSection />
+      <ProductDemoSection />
+      <IndustriesSection />
+      <ResultsSection />
+      <TestimonialsSection />
+      <FaqSection />
+      <FinalCtaSection />
       <Footer />
     </main>
   )

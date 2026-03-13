@@ -118,7 +118,7 @@ export function SidebarNav({
   // Desktop sidebar
   const sidebarContent = (
     <aside
-      suppressHydrationWarning
+     
       className={cn(
         "flex h-screen flex-col border-r border-border/60 bg-gradient-to-b from-sidebar to-sidebar/95 transition-all duration-300",
         "max-md:hidden",
@@ -126,8 +126,8 @@ export function SidebarNav({
       )}
     >
       {/* Logo */}
-      <div suppressHydrationWarning className="flex h-14 items-center gap-2.5 border-b border-border/60 px-4">
-        <div suppressHydrationWarning className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-foreground shadow-sm">
+      <div className="flex h-14 items-center gap-2.5 border-b border-border/60 px-4">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-foreground shadow-sm">
           <Zap className="size-4 text-background" />
         </div>
         {!collapsed && (
@@ -138,9 +138,9 @@ export function SidebarNav({
       </div>
 
       {/* Nav Groups */}
-      <nav suppressHydrationWarning className="flex flex-1 flex-col gap-1 overflow-y-auto px-2 pt-4 no-scrollbar">
+      <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-2 pt-4 no-scrollbar">
         {navGroups.map((group) => (
-          <div suppressHydrationWarning key={group.label} className="mb-2">
+          <div key={group.label} className="mb-2">
             {!collapsed && (
               <span className="mb-1.5 block px-2.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
                 {group.label}
@@ -149,7 +149,7 @@ export function SidebarNav({
             {collapsed && group.label !== "Overview" && (
               <div className="mx-3 my-2 h-px bg-border/40" />
             )}
-            <div suppressHydrationWarning className="flex flex-col gap-0.5">
+            <div className="flex flex-col gap-0.5">
               {group.items.map((item) => {
                 const isActive = activeView === item.id
                 const btn = renderNavButton(item, isActive, !collapsed)
@@ -165,7 +165,7 @@ export function SidebarNav({
                   )
                 }
 
-                return <div suppressHydrationWarning key={item.id}>{btn}</div>
+                return <div key={item.id}>{btn}</div>
               })}
             </div>
           </div>
@@ -173,8 +173,8 @@ export function SidebarNav({
       </nav>
 
       {/* Footer */}
-      <div suppressHydrationWarning className="border-t border-border/60 p-2 space-y-1">
-        <div suppressHydrationWarning className={cn("flex mb-2", collapsed ? "justify-center" : "px-1.5")}>
+      <div className="border-t border-border/60 p-2 space-y-1">
+        <div className={cn("flex mb-2", collapsed ? "justify-center" : "px-1.5")}>
           <ThemeToggle />
         </div>
         {(() => {
@@ -225,16 +225,16 @@ export function SidebarNav({
         />
       )}
       <aside
-        suppressHydrationWarning
+       
         className={cn(
           "fixed left-0 top-0 z-50 flex h-screen w-[280px] flex-col bg-gradient-to-b from-sidebar to-sidebar/95 shadow-2xl transition-transform duration-300 md:hidden",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Logo + Close */}
-        <div suppressHydrationWarning className="flex h-14 items-center justify-between border-b border-border/60 px-4">
-          <div suppressHydrationWarning className="flex items-center gap-2.5">
-            <div suppressHydrationWarning className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-foreground shadow-sm">
+        <div className="flex h-14 items-center justify-between border-b border-border/60 px-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-foreground shadow-sm">
               <Zap className="size-4 text-background" />
             </div>
             <span className="text-sm font-bold tracking-tight text-foreground">
@@ -251,17 +251,17 @@ export function SidebarNav({
         </div>
 
         {/* Nav Groups */}
-        <nav suppressHydrationWarning className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 pt-4 no-scrollbar">
+        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 pt-4 no-scrollbar">
           {navGroups.map((group) => (
-            <div suppressHydrationWarning key={group.label} className="mb-3">
+            <div key={group.label} className="mb-3">
               <span className="mb-1.5 block px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
                 {group.label}
               </span>
-              <div suppressHydrationWarning className="flex flex-col gap-0.5">
+              <div className="flex flex-col gap-0.5">
                 {group.items.map((item) => {
                   const isActive = activeView === item.id
                   return (
-                    <div suppressHydrationWarning key={item.id}>
+                    <div key={item.id}>
                       {renderNavButton(item, isActive, true, true)}
                     </div>
                   )
@@ -272,8 +272,8 @@ export function SidebarNav({
         </nav>
 
         {/* Footer */}
-        <div suppressHydrationWarning className="border-t border-border/60 p-3 space-y-2">
-          <div suppressHydrationWarning className="px-1">
+        <div className="border-t border-border/60 p-3 space-y-2">
+          <div className="px-1">
             <ThemeToggle />
           </div>
           <button

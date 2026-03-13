@@ -2,6 +2,17 @@
 
 import { useState } from "react"
 import {
+  PlayCircle,
+  PauseCircle,
+  Volume2,
+  Share,
+  Copy,
+  Search as SearchIcon,
+  Bot,
+  User,
+  Scissors,
+  Download,
+  MessageCircle,
   Phone,
   PhoneIncoming,
   PhoneOutgoing,
@@ -49,6 +60,17 @@ import {
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 
+export interface ChatMessage {
+  speaker: "ai" | "human"
+  timestamp: string
+  text: string
+}
+
+export interface KeyMoment {
+  timestamp: string
+  text: string
+}
+
 interface CallRecord {
   id: string
   contact: string
@@ -70,6 +92,8 @@ interface CallRecord {
   recordingAvailable?: boolean
   leadScore?: number
   callNotes?: string
+  messages?: ChatMessage[]
+  keyMoments?: KeyMoment[]
 }
 
 const toolIcons: Record<string, React.ElementType> = {
@@ -131,6 +155,20 @@ const calls: CallRecord[] = [
     tags: ["Enterprise", "Demo Scheduled", "Hot Lead"],
     priority: "high", recordingAvailable: true, leadScore: 92,
     callNotes: "Decision maker. Budget approved for Q1.",
+    keyMoments: [
+      { timestamp: "00:45", text: "Prospect asked about pricing" },
+      { timestamp: "01:12", text: "Mentioned current outdated system" },
+      { timestamp: "02:34", text: "Interested in demo" },
+      { timestamp: "03:40", text: "Confirmed availability next Tuesday" }
+    ],
+    messages: [
+      { speaker: "ai", timestamp: "00:03", text: "Hello Sarah, this is the AI assistant from DeadAssLead. I\'m calling to discuss your interest in enterprise automation." },
+      { speaker: "human", timestamp: "00:08", text: "Yes, I saw your platform online and wanted to know how it compares with our current system." },
+      { speaker: "ai", timestamp: "00:15", text: "I can absolutely help with that. What system are you currently using?" },
+      { speaker: "human", timestamp: "00:20", text: "We are using a legacy Salesforce setup but it\'s getting too clunky for our rapid outbound needs." },
+      { speaker: "ai", timestamp: "00:30", text: "I understand. Many of our enterprise clients switch for exactly that reason. Our platform enables 10x faster outbound workflows. Would you be interested in a brief demo of how we handle CRM sync?" },
+      { speaker: "human", timestamp: "00:45", text: "Maybe. First, can you tell me roughly how your pricing structures work for a team of 15?" },
+    ]
   },
   {
     id: "c2", contact: "Mike Chen", email: "mike.c@startupxyz.com", company: "StartupXYZ", location: "Austin, TX",
@@ -252,135 +290,317 @@ function LeadScoreBar({ score }: { score: number }) {
 
 function CallDetailView({ call, onBack }: { call: CallRecord; onBack: () => void }) {
   const sConfig = sentimentConfig[call.sentiment]
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [playbackSpeed, setPlaybackSpeed] = useState("1x")
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-200 mt-2">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center border-b border-border pb-4">
-        <div className="flex items-center gap-3">
+    <div className="flex h-full flex-col animate-in fade-in zoom-in-95 duration-200">
+      {/* 1. Header Section */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center justify-between border-b border-border pb-4 pt-2">
+        <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" onClick={onBack} className="h-8 gap-1.5 px-2">
             <ArrowLeft className="size-3.5" />
             <span className="hidden sm:inline">Back</span>
           </Button>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-0.5">
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-semibold text-foreground sm:text-lg">{call.contact}</h2>
-              <Badge className={cn("gap-1 border text-[10px] font-medium hidden sm:flex", sConfig.bg, sConfig.color, sConfig.border)}>
-                <span className={cn("size-1.5 rounded-full", sConfig.dotColor)} />
-                {sConfig.label}
-              </Badge>
+              <h2 className="text-lg font-bold text-foreground">{call.contact}</h2>
+              <span className="text-muted-foreground">|</span>
+              <span className="text-sm font-medium text-muted-foreground">{call.company}</span>
             </div>
-            <p className="text-xs text-muted-foreground sm:text-sm">{call.company} • {call.date} at {call.time}</p>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="capitalize">{call.type} Call</span>
+              <span>•</span>
+              <span>{call.date} {call.time}</span>
+              <span>•</span>
+              <span>Duration: {call.duration}</span>
+            </div>
           </div>
         </div>
-        <div className="ml-auto flex items-center gap-1.5">
-          {call.tools.map((tool: string) => {
-            const ToolIcon = toolIcons[tool] || Phone
-            const colorClass = toolColors[tool] || "text-muted-foreground bg-accent/50 border-border"
-            return (
-              <div key={tool} className={cn("flex size-7 items-center justify-center rounded-md border", colorClass)} title={tool}>
-                <ToolIcon className="size-3.5" />
-              </div>
-            )
-          })}
+        
+        <div className="flex items-center gap-3">
+          <Badge className={cn("gap-1.5 border px-2.5 py-1 text-xs font-semibold", sConfig.bg, sConfig.color, sConfig.border)}>
+            <span className={cn("size-2 rounded-full", sConfig.dotColor)} />
+            Sentiment: {sConfig.label}
+          </Badge>
+          <Badge variant="outline" className="text-xs font-semibold px-2.5 py-1">
+            Lead Status: <span className="text-foreground ml-1 font-bold">{((call.leadScore || 0) >= 80) ? "Hot" : "Warm"}</span>
+          </Badge>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">
-        {/* Left: Contact Info */}
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-          <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            <Users className="size-3.5" />
-            Contact Details
-          </h4>
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 text-sm text-foreground">
-              <Mail className="size-4 text-muted-foreground" />
-              <span>{call.email}</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-foreground">
-              <Building2 className="size-4 text-muted-foreground" />
-              <span>{call.company}</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-foreground">
-              <MapPin className="size-4 text-muted-foreground" />
-              <span>{call.location}</span>
-            </div>
-          </div>
-          {call.tags && call.tags.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {call.tags.map((tag: string) => (
-                <Badge key={tag} variant="secondary" className="gap-1 px-2 py-0.5 text-[10px]">
-                  <Tag className="size-2.5" />
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Middle: AI Summary */}
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-          <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            <Sparkles className="size-3.5" />
-            AI Summary
-          </h4>
-          {call.aiSummary && (
-            <p className="text-sm leading-relaxed text-foreground">{call.aiSummary}</p>
-          )}
-        </div>
-
-        {/* Right: Next Steps & Actions */}
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-          <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            <CalendarClock className="size-3.5" />
-            Next Steps
-          </h4>
-          {call.nextAction && (
-            <div className="flex items-start gap-2.5 rounded-lg border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 p-3.5">
-              <ArrowUpRight className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
-              <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">{call.nextAction}</p>
-            </div>
-          )}
-          {call.callNotes && (
-            <div className="rounded-lg bg-accent/50 p-3.5">
-              <p className="mb-1 text-xs font-medium text-muted-foreground">Notes</p>
-              <p className="text-sm text-foreground">{call.callNotes}</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Bottom: Transcript and Actions */}
-      <div className="flex flex-col gap-4 sm:gap-6">
-        {call.transcript && (
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-            <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <FileText className="size-3.5" />
-              Full Transcript
-            </h4>
-            <div className="rounded-lg border border-dashed border-border bg-accent/30 p-4">
-              <p className="text-sm leading-relaxed text-muted-foreground">{call.transcript}</p>
-            </div>
-          </div>
-        )}
-
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+      <div className="grid flex-1 grid-cols-1 gap-6 pt-5 lg:grid-cols-3 overflow-hidden">
+        {/* Left Column: Player & Transcript */}
+        <div className="flex h-[calc(100vh-14rem)] flex-col gap-5 lg:col-span-2 overflow-hidden">
+          
+          {/* 2. Call Recording Player */}
           {call.recordingAvailable && (
-            <Button variant="outline" className="w-full sm:w-auto justify-center gap-2 text-xs transition-colors hover:bg-accent hover:text-foreground">
-              <Headphones className="size-4" />
-              Play Recording
-            </Button>
+            <Card className="shrink-0 border bg-card shadow-sm">
+              <CardContent className="p-4 flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Button 
+                      className="size-10 rounded-full bg-foreground text-background hover:bg-foreground/90 p-0"
+                      onClick={() => setIsPlaying(!isPlaying)}
+                    >
+                      {isPlaying ? <PauseCircle className="size-5" /> : <PlayCircle className="size-5" />}
+                    </Button>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-foreground">Play Recording</span>
+                      <span className="text-xs text-muted-foreground">00:00 / {call.duration}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm" onClick={() => setPlaybackSpeed(playbackSpeed === "1x" ? "1.5x" : playbackSpeed === "1.5x" ? "2x" : "1x")} className="text-xs font-semibold">
+                      Speed: {playbackSpeed}
+                    </Button>
+                    <div className="h-4 w-px bg-border" />
+                    <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
+                      <Volume2 className="size-4" />
+                    </Button>
+                    <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs">
+                      <Download className="size-3.5" />
+                      Download
+                    </Button>
+                  </div>
+                </div>
+                {/* Timeline bar */}
+                <div className="w-full mt-1 flex items-center gap-3">
+                  <div className="h-2 flex-1 cursor-pointer overflow-hidden rounded-full bg-accent relative group">
+                    <div className="h-full w-1/4 rounded-full bg-foreground transition-all duration-300" />
+                    <div className="absolute top-1/2 -mt-1.5 left-1/4 size-3 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           )}
-          <Button variant="outline" className="w-full sm:w-auto justify-center gap-2 text-xs transition-colors hover:bg-accent hover:text-foreground border-foreground text-foreground">
-            <ExternalLink className="size-4" />
-            View Full Details
-          </Button>
+
+          {/* 3. Conversation Transcript */}
+          <Card className="flex flex-1 flex-col overflow-hidden border bg-card shadow-sm">
+            <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                <MessageCircle className="size-4 text-muted-foreground" />
+                Conversation Transcript
+              </h3>
+              <div className="flex items-center justify-end gap-2">
+                 <div className="relative hidden sm:block">
+                   <SearchIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                   <input type="text" placeholder="Search conversation..." className="h-8 w-[160px] rounded-md border border-input bg-transparent pl-8 pr-3 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring" />
+                 </div>
+                 <Button variant="outline" size="sm" className="h-8 gap-1">
+                   <Filter className="size-3.5" />
+                   <span className="text-xs">Filter</span>
+                 </Button>
+              </div>
+            </div>
+            <ScrollArea className="flex-1 p-4">
+              <div className="flex flex-col gap-6 pb-6 pr-4">
+                {(call.messages || []).map((msg, i) => (
+                  <div key={i} className={cn("flex w-full", msg.speaker === "ai" ? "justify-start" : "justify-end")}>
+                    <div className={cn("flex max-w-[90%] sm:max-w-[85%] flex-col gap-1.5", msg.speaker === "ai" ? "items-start" : "items-end")}>
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground tracking-tight">
+                        {msg.speaker === "ai" ? (
+                          <>
+                            <div className="flex items-center justify-center size-5 bg-foreground rounded-full text-background">
+                              <Bot className="size-3" />
+                            </div>
+                            <span className="font-semibold text-foreground tracking-normal">AI Agent</span>
+                            <span>|</span>
+                            <span>{msg.timestamp}</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>{msg.timestamp}</span>
+                            <span>|</span>
+                            <span className="font-semibold text-foreground tracking-normal">{call.contact.split(' ')[0]}</span>
+                            <div className="flex items-center justify-center size-5 bg-accent border rounded-full text-foreground">
+                              <User className="size-3" />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className={cn(
+                        "rounded-2xl px-4 py-3 text-sm leading-relaxed",
+                        msg.speaker === "ai" 
+                          ? "bg-accent/40 text-foreground rounded-tl-sm border border-border/50" 
+                          : "bg-foreground text-background rounded-tr-sm shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)]"
+                      )}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {(!call.messages || call.messages.length === 0) && (
+                  <div className="flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
+                    <MessageCircle className="mb-2 size-8 opacity-20" />
+                    <p className="text-sm">Transcript details not available for this call.</p>
+                    {call.transcript && (
+                      <p className="mt-2 text-xs">{call.transcript}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          </Card>
         </div>
+
+        {/* Right Column: Insights, Key Moments, Contact Details */}
+        <ScrollArea className="h-[calc(100vh-14rem)] pb-4 lg:pr-4">
+          <div className="flex flex-col gap-5 pb-8 overflow-x-hidden">
+            
+            {/* 4. Sentiment & AI Analysis */}
+            <Card className="overflow-hidden border bg-card shadow-sm">
+              <div className="border-b border-border bg-accent/30 px-4 py-3">
+                <h3 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                  <Sparkles className="size-4 text-violet-500" />
+                  AI Analysis & Insights
+                </h3>
+              </div>
+              <CardContent className="p-4 flex flex-col gap-4">
+                <div className="flex items-center gap-10">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground">Sentiment Score</span>
+                    <span className={cn("text-lg font-bold", sConfig.color)}>{sConfig.label}</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground">Confidence</span>
+                    <span className="text-lg font-bold text-foreground">92%</span>
+                  </div>
+                </div>
+                
+                <div className="h-px w-full bg-border" />
+                
+                <div>
+                  <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Key Takeaways</h4>
+                  <ul className="flex flex-col gap-2">
+                    {call.aiSummary?.split('. ').map((point, idx) => point.trim() && (
+                      <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                        <ArrowUpRight className="mt-0.5 size-3.5 shrink-0 text-emerald-500" />
+                        <span className="leading-snug">{point.replace(/\.$/, '')}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 5. Key Moments */}
+            {(call.keyMoments || []).length > 0 && (
+              <Card className="overflow-hidden border bg-card shadow-sm">
+                <div className="border-b border-border bg-accent/30 px-4 py-3">
+                  <h3 className="flex items-center gap-1.5 text-sm font-semibold text-foreground">
+                    <Timer className="size-4 text-emerald-500" />
+                    Key Moments
+                  </h3>
+                </div>
+                <CardContent className="p-0">
+                  <div className="flex flex-col">
+                    {call.keyMoments?.map((loc, i) => (
+                      <button key={i} className="flex items-start gap-3 border-b border-border last:border-0 p-3 text-left transition-colors hover:bg-accent/40 group">
+                        <Badge variant="secondary" className="mt-0.5 whitespace-nowrap px-1.5 py-0 font-mono text-[10px] group-hover:bg-primary group-hover:text-primary-foreground border-border">{loc.timestamp}</Badge>
+                        <span className="text-xs font-medium leading-relaxed text-foreground group-hover:text-foreground">{loc.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* 7. Next Steps Section */}
+            <Card className="overflow-hidden border border-emerald-500/20 bg-emerald-50/20 shadow-[0_4px_20px_-10px_rgba(16,185,129,0.15)] dark:bg-emerald-500/5">
+              <div className="border-b border-emerald-500/10 px-4 py-3">
+                <h3 className="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                  <Target className="size-4" />
+                  Suggested Next Steps
+                </h3>
+              </div>
+              <CardContent className="p-4 flex flex-col gap-2">
+                {call.nextAction && (
+                  <p className="mb-3 text-sm font-medium text-foreground">{call.nextAction}</p>
+                )}
+                <Button className="w-full justify-start gap-2 text-xs" variant="default">
+                  <FileText className="size-3.5" />
+                  Send Pricing Comparison Sheet
+                </Button>
+                <Button className="w-full justify-start gap-2 text-xs dark:hover:bg-accent/50" variant="outline">
+                  <CalendarClock className="size-3.5" />
+                  Confirm Demo Slot
+                </Button>
+                <Button className="w-full justify-start gap-2 text-xs dark:hover:bg-accent/50" variant="outline">
+                  <Mail className="size-3.5" />
+                  Send Follow-Up Email
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* 6. Contact & Notes */}
+            <Card className="overflow-hidden border bg-card shadow-sm">
+              <CardContent className="flex flex-col gap-5 p-4">
+                 <div className="flex flex-col gap-3">
+                  <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <Users className="size-3.5" />
+                    Contact Details
+                  </h4>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex w-full items-center gap-2 text-sm text-foreground overflow-hidden">
+                      <Mail className="size-4 shrink-0 text-muted-foreground" />
+                      <span className="truncate">{call.email}</span>
+                    </div>
+                    <div className="flex w-full items-center gap-2 text-sm text-foreground overflow-hidden">
+                      <Building2 className="size-4 shrink-0 text-muted-foreground" />
+                      <span className="truncate">{call.company}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-foreground">
+                      <MapPin className="size-4 shrink-0 text-muted-foreground" />
+                      <span>{call.location}</span>
+                    </div>
+                    {call.tags && call.tags.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {call.tags.map((tag: string) => (
+                          <Badge key={tag} variant="secondary" className="gap-1 px-2 py-0.5 text-[10px]">
+                            <Tag className="size-2.5" />
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="h-px w-full bg-border" />
+                
+                {/* 8. Notes */}
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Manual Notes</h4>
+                    <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px]">Edit</Button>
+                  </div>
+                  <div className="min-h-[60px] rounded-md border border-input bg-transparent p-3 text-sm text-foreground shadow-sm">
+                    {call.callNotes || "Click to add notes..."}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* 10. Export Options */}
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" className="gap-1.5 flex-1 text-xs">
+                <Copy className="size-3.5" />
+                Copy Transcript
+              </Button>
+              <Button variant="outline" size="sm" className="gap-1.5 flex-1 text-xs">
+                <Share className="size-3.5" />
+                Share Link
+              </Button>
+            </div>
+            
+          </div>
+        </ScrollArea>
       </div>
     </div>
   )
 }
-
 export function CallsView() {
   const [sentimentFilter, setSentimentFilter] = useState<string>("all")
   const [typeFilter, setTypeFilter] = useState<string>("all")
