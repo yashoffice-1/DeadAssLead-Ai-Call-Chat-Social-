@@ -14,12 +14,27 @@ import {
   FileText,
   LogOut,
   X,
-  Settings,
+  Bot,
+  BookOpen,
+  PhoneCall,
+  RadioTower,
+  Megaphone,
 } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-export type ViewType = "overview" | "flows" | "inbox" | "calls" | "rules" | "integrations"
+export type ViewType =
+  | "overview"
+  | "flows"
+  | "inbox"
+  | "calls"
+  | "rules"
+  | "integrations"
+  | "agents"
+  | "knowledge-base"
+  | "phone-numbers"
+  | "batch-call"
+  | "campaigns"
 
 interface NavGroup {
   label: string
@@ -45,6 +60,16 @@ const navGroups: NavGroup[] = [
     items: [
       { id: "inbox", label: "Social Inbox", icon: Inbox, badge: "3" },
       { id: "calls", label: "Call History", icon: Phone },
+    ],
+  },
+  {
+    label: "Call Center",
+    items: [
+      { id: "agents", label: "Agents", icon: Bot },
+      { id: "knowledge-base", label: "Knowledge Base", icon: BookOpen },
+      { id: "phone-numbers", label: "Phone Numbers", icon: PhoneCall },
+      { id: "batch-call", label: "Batch Call", icon: RadioTower },
+      { id: "campaigns", label: "Campaigns", icon: Megaphone },
     ],
   },
   {
@@ -118,7 +143,6 @@ export function SidebarNav({
   // Desktop sidebar
   const sidebarContent = (
     <aside
-     
       className={cn(
         "flex h-screen flex-col border-r border-border/60 bg-gradient-to-b from-sidebar to-sidebar/95 transition-all duration-300",
         "max-md:hidden",
@@ -225,7 +249,6 @@ export function SidebarNav({
         />
       )}
       <aside
-       
         className={cn(
           "fixed left-0 top-0 z-50 flex h-screen w-[280px] flex-col bg-gradient-to-b from-sidebar to-sidebar/95 shadow-2xl transition-transform duration-300 md:hidden",
           mobileOpen ? "translate-x-0" : "-translate-x-full"

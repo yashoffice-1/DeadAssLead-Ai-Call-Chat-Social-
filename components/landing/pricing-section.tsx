@@ -59,7 +59,7 @@ const plans = [
 
 export function PricingSection() {
   return (
-    <section className="relative px-4 py-16 overflow-hidden sm:px-6 sm:py-24" suppressHydrationWarning>
+    <section id="pricing" className="relative px-4 py-16 overflow-hidden sm:px-6 sm:py-24" suppressHydrationWarning>
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-secondary/30 via-transparent to-secondary/30" />
 

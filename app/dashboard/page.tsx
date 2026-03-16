@@ -11,6 +11,11 @@ import { InboxView } from "@/components/dashboard/inbox-view"
 import { CallsView } from "@/components/dashboard/calls-view"
 import { RulesView } from "@/components/dashboard/rules-view"
 import { CredentialModal } from "@/components/dashboard/credential-modal"
+import { AgentsView } from "@/components/dashboard/agents-view"
+import { KnowledgeBaseView } from "@/components/dashboard/knowledge-base-view"
+import { PhoneNumbersView } from "@/components/dashboard/phone-numbers-view"
+import { BatchCallView } from "@/components/dashboard/batch-call-view"
+import { CampaignsView } from "@/components/dashboard/campaigns-view"
 
 import {
   Users,
@@ -28,6 +33,11 @@ import {
   ArrowRight,
   TrendingUp,
   Activity,
+  Bot,
+  BookOpen,
+  PhoneCall,
+  RadioTower,
+  Megaphone,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -38,6 +48,11 @@ const viewTitles: Record<ViewType, string> = {
   calls: "Call History",
   rules: "Post Rules",
   integrations: "Integrations",
+  agents: "Agents",
+  "knowledge-base": "Knowledge Base",
+  "phone-numbers": "Phone Numbers",
+  "batch-call": "Batch Call",
+  campaigns: "Campaigns",
 }
 
 const viewDescriptions: Record<ViewType, string> = {
@@ -47,6 +62,11 @@ const viewDescriptions: Record<ViewType, string> = {
   calls: "Inbound & outbound call logs with sentiment analysis",
   rules: "Schedule AI-generated posts and manage publishing rules",
   integrations: "Connect your tools and services",
+  agents: "Create and manage AI voice assistants",
+  "knowledge-base": "Documents used by AI agents during calls",
+  "phone-numbers": "Numbers used by AI agents to make and receive calls",
+  "batch-call": "Launch outbound AI calling campaigns at scale",
+  campaigns: "Track AI call campaign performance and metrics",
 }
 
 const viewIcons: Record<ViewType, React.ElementType> = {
@@ -56,6 +76,11 @@ const viewIcons: Record<ViewType, React.ElementType> = {
   calls: Phone,
   rules: FileText,
   integrations: Puzzle,
+  agents: Bot,
+  "knowledge-base": BookOpen,
+  "phone-numbers": PhoneCall,
+  "batch-call": RadioTower,
+  campaigns: Megaphone,
 }
 
 // Credential step configs per service
@@ -240,6 +265,21 @@ export default function DashboardPage() {
       if (lower.includes("connect") || lower.includes("integrate") || lower.includes("api")) {
         changeView("integrations"); return
       }
+      if (lower.includes("agent") || lower.includes("bot") || lower.includes("assistant")) {
+        changeView("agents"); return
+      }
+      if (lower.includes("knowledge") || lower.includes("document") || lower.includes("upload") || lower.includes("pdf")) {
+        changeView("knowledge-base"); return
+      }
+      if (lower.includes("phone") || lower.includes("number") || lower.includes("twilio") || lower.includes("plivo")) {
+        changeView("phone-numbers"); return
+      }
+      if (lower.includes("batch") || lower.includes("outbound") || lower.includes("blast")) {
+        changeView("batch-call"); return
+      }
+      if (lower.includes("campaign") || lower.includes("analytics") || lower.includes("stats") || lower.includes("performance")) {
+        changeView("campaigns"); return
+      }
       changeView("overview")
     },
     []
@@ -380,6 +420,11 @@ export default function DashboardPage() {
                 {activeView === "inbox" && <InboxView />}
                 {activeView === "calls" && <CallsView />}
                 {activeView === "rules" && <RulesView />}
+                {activeView === "agents" && <AgentsView />}
+                {activeView === "knowledge-base" && <KnowledgeBaseView />}
+                {activeView === "phone-numbers" && <PhoneNumbersView />}
+                {activeView === "batch-call" && <BatchCallView />}
+                {activeView === "campaigns" && <CampaignsView />}
                 {activeView === "integrations" && (
                   <IntegrationsView onConnect={openCredentialModal} />
                 )}
@@ -451,6 +496,11 @@ function QuickNavGrid({ onNavigate }: { onNavigate: (view: ViewType) => void }) 
     { view: "flows", icon: GitBranch, label: "Flow Builder", desc: "4 active flows", accent: "from-violet-500/10 to-purple-500/5 border-violet-500/20 hover:border-violet-500/40", count: "4" },
     { view: "inbox", icon: Inbox, label: "Social Inbox", desc: "3 pending replies", accent: "from-blue-500/10 to-cyan-500/5 border-blue-500/20 hover:border-blue-500/40", count: "3" },
     { view: "calls", icon: Phone, label: "Call History", desc: "5 interested leads", accent: "from-emerald-500/10 to-green-500/5 border-emerald-500/20 hover:border-emerald-500/40", count: "5" },
+    { view: "agents", icon: Bot, label: "Agents", desc: "4 AI agents", accent: "from-cyan-500/10 to-teal-500/5 border-cyan-500/20 hover:border-cyan-500/40", count: "4" },
+    { view: "knowledge-base", icon: BookOpen, label: "Knowledge Base", desc: "4 documents", accent: "from-indigo-500/10 to-blue-500/5 border-indigo-500/20 hover:border-indigo-500/40", count: "4" },
+    { view: "phone-numbers", icon: PhoneCall, label: "Phone Numbers", desc: "4 numbers", accent: "from-lime-500/10 to-green-500/5 border-lime-500/20 hover:border-lime-500/40", count: "4" },
+    { view: "batch-call", icon: RadioTower, label: "Batch Call", desc: "2 active", accent: "from-orange-500/10 to-red-500/5 border-orange-500/20 hover:border-orange-500/40", count: "2" },
+    { view: "campaigns", icon: Megaphone, label: "Campaigns", desc: "1,037 calls", accent: "from-fuchsia-500/10 to-pink-500/5 border-fuchsia-500/20 hover:border-fuchsia-500/40", count: "4" },
     { view: "rules", icon: FileText, label: "Post Rules", desc: "3 active rules", accent: "from-amber-500/10 to-orange-500/5 border-amber-500/20 hover:border-amber-500/40", count: "3" },
     { view: "integrations", icon: Puzzle, label: "Integrations", desc: "8 connected", accent: "from-pink-500/10 to-rose-500/5 border-pink-500/20 hover:border-pink-500/40", count: "8" },
   ]
